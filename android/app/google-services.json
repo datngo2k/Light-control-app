@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "308225674396",
+    "firebase_url": "https://control-light-b47e4-default-rtdb.firebaseio.com",
+    "project_id": "control-light-b47e4",
+    "storage_bucket": "control-light-b47e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308225674396:android:580ec1d93ea76f9a55f159",
+        "android_client_info": {
+          "package_name": "com.example.light_controller_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308225674396-19laf202ke7pm9hogf6rha5uqvcaucpk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBElBn6XLhLBDvlbJkgtBM39Q-NHY3vzxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "308225674396-19laf202ke7pm9hogf6rha5uqvcaucpk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
