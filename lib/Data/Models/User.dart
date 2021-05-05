@@ -22,6 +22,7 @@ class UserApp {
       'email': email,
       'fullName': fullName,
       'phone': phone,
+      'uid': uid,
     };
   }
 

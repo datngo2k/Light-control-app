@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:light_controller_app/Presentation/Screens/Admin/admin_screen.dart';
 import 'package:light_controller_app/Presentation/Screens/Login/login_screen.dart';
 import 'package:light_controller_app/Presentation/Screens/Register/register_screen.dart';
+import 'package:light_controller_app/Presentation/Screens/User/user-screen.dart';
 
 
 class AppRouter {
@@ -25,7 +26,7 @@ class AppRouter {
         break;
       case '/user':
         return MaterialPageRoute(
-          builder: (_) => AdminScreen(),
+          builder: (_) => UserScreen(),
         );
         break;
       default: return null;
