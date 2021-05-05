@@ -1,13 +1,17 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:light_controller_app/Logic/Auth/auth_bloc.dart';
 import 'package:light_controller_app/Logic/Internet/internet_cubit.dart';
+import 'package:light_controller_app/Logic/Register/cubit/register_cubit.dart';
 import 'package:light_controller_app/Presentation/Routes/app-router.dart';
 import 'package:light_controller_app/Presentation/Screens/Login/login_screen.dart';
 
-void main() {
+void main() async{
   AppRouter appRouter = AppRouter();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp(
     appRouter: appRouter,
     connectivity: Connectivity(),
@@ -29,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc()..add(AppStarted()),
+        ),
+        BlocProvider<RegisterCubit>(
+          create: (context) => RegisterCubit(),
         ),
       ],
       child: MaterialApp(

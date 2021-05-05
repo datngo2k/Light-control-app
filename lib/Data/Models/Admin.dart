@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 
-class Admin {
+class AdminApp {
   String email;
   String fullName;
   String phone;
 
-  Admin({
+  AdminApp({
     @required this.email,
     @required this.fullName,
     @required this.phone,
@@ -20,8 +20,8 @@ class Admin {
     };
   }
 
-  factory Admin.fromMap(Map<String, dynamic> map) {
-    return Admin(
+  factory AdminApp.fromMap(Map<String, dynamic> map) {
+    return AdminApp(
       email: map['email'],
       fullName: map['fullName'],
       phone: map['phone'],
@@ -30,5 +30,5 @@ class Admin {
 
   String toJson() => json.encode(toMap());
 
-  factory Admin.fromJson(String source) => Admin.fromMap(json.decode(source));
+  factory AdminApp.fromJson(String source) => AdminApp.fromMap(json.decode(source));
 }

@@ -27,7 +27,7 @@ class LoginBody extends StatelessWidget {
             Text("SIGN IN", style: kBigTextStyle),
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
-              hintText: "Username",
+              hintText: "Email",
               onChanged: (value) {},
             ),
             RoundedPasswordField(

@@ -2,19 +2,21 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 
-class User {
-  bool isActive;
+class UserApp {
+  int isActive = 0;
   String email;
   String fullName;
   String phone;
+  String uid;
 
-  User({
-    @required this.isActive,
+  UserApp({
     @required this.email,
     @required this.fullName,
     @required this.phone,
+    @required this.isActive,
+    this.uid
   });
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'isActive': isActive,
       'email': email,
@@ -23,16 +25,13 @@ class User {
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
+  factory UserApp.fromJson(Map<String, dynamic> map) {
+    return UserApp(
       isActive: map['isActive'],
       email: map['email'],
       fullName: map['fullName'],
       phone: map['phone'],
+      uid: map['uid'],
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory User.fromJson(String source) => User.fromMap(json.decode(source));
 }
