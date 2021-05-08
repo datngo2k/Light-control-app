@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:light_controller_app/Logic/Auth/cubit/auth_cubit.dart';
 import 'package:light_controller_app/Presentation/Screens/Login/component/background.dart';
@@ -109,8 +108,6 @@ class _LoginBodyState extends State<LoginBody> {
                           SnackBar(content: Text("Vui lòng điền đầy đủ thông tin"));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     } else {
-                      print("Email dat: $email");
-                      print("Admin: $isAdmin");
                       if(isAdmin) {
                         BlocProvider.of<AuthCubit>(context)
                           .signInAdmin(email, password);

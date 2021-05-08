@@ -10,6 +10,7 @@ class UserAPI {
   static FirebaseDatabase database = new FirebaseDatabase();
   static DatabaseReference _userRef = database.reference().child('user');
   static DatabaseReference _adminRef = database.reference().child('admin');
+  List<UserApp> users = [];
   FirebaseAuth firebaseAuth;
 
   Future<RegisterState> signUp(UserApp user, String password) async {
@@ -30,11 +31,23 @@ class UserAPI {
     _userRef.push().set(user.toJson());
   }
 
-  void readUser(UserApp user) {
-    _userRef.once().then((DataSnapshot dataSnapshot) {
-      print(dataSnapshot.value);
-    });
+  Future<List<UserApp>> getAllUsers() async {
+    users = [];
+    DataSnapshot dataSnapshot = await _userRef.once();
+    var keys = dataSnapshot.value.keys;
+    var values = dataSnapshot.value;
+    for (var key in keys) {
+      UserApp user = UserApp.fromSnapshot(values[key]);
+      user.key = key;
+      users.add(user);
+    }
+    return users;
   }
+
+  void checkUser(String key, UserApp user){
+    _userRef.child(key).update(user.toJson());
+  }
+
 
   AuthState signIn(String email, String password) {
     firebaseAuth = FirebaseAuth.instance;
@@ -62,7 +75,20 @@ class UserAPI {
         .then((DataSnapshot dataSnapshot) {
       if (dataSnapshot.value != null) {
         flag = true;
-      } 
+      }
+    });
+    return flag;
+  }
+  Future<bool> isActiveAccount(String email) async {
+    bool flag = false;
+    await _userRef
+        .orderByChild("email")
+        .equalTo(email)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      if (dataSnapshot.value != null) {
+        flag = dataSnapshot.value.entries.elementAt(0).value["isActive"] == 1;
+      }
     });
     return flag;
   }

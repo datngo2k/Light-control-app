@@ -9,8 +9,15 @@ class AuthCubit extends Cubit<AuthState> {
   UserRespository userRespository = UserRespository();
 
   void signIn(String email, String password) async {
-    AuthState state =  userRespository.signIn(email, password);
-    emit(state);
+    bool isActive = await userRespository.isActiveAccount(email);
+    if(!isActive){
+      emit(AuthLoginFailed(errorMessage: "Tài khoản chưa được kích hoạt hoặc không tồn tại"));
+    }
+    else{
+      AuthState state =  userRespository.signIn(email, password);
+      emit(state);
+    }
+    
   }
   void signInAdmin(String email, String password) async {
     bool isExist = await userRespository.isExistAdmin(email);
@@ -23,7 +30,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
     
   }
-
   void signOut(){
     userRespository.signOut();
     emit(AuthLogOutSuccess());

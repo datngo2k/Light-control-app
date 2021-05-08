@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:light_controller_app/Logic/Auth/cubit/auth_cubit.dart';
 import 'package:light_controller_app/Logic/Internet/internet_cubit.dart';
 import 'package:light_controller_app/Logic/Register/cubit/register_cubit.dart';
+import 'package:light_controller_app/Logic/User/cubit/user_cubit.dart';
 import 'package:light_controller_app/Presentation/Routes/app-router.dart';
 import 'package:light_controller_app/Presentation/Screens/Login/login_screen.dart';
 
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AuthCubit>(
           create: (context) => AuthCubit(),
+        ),
+        BlocProvider<UserCubit>(
+          create: (context) => UserCubit(),
         ),
       ],
       child: MaterialApp(

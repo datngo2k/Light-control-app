@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:light_controller_app/Data/DataProviders/UserAPI.dart';
+import 'package:light_controller_app/Data/Respositories/UserRespository.dart';
 import 'package:light_controller_app/Presentation/Screens/Admin/component/device_screen.dart';
 import 'package:light_controller_app/Presentation/Screens/Admin/component/history_screen.dart';
 import 'package:light_controller_app/Presentation/Screens/Admin/component/room_screen.dart';
@@ -17,8 +19,17 @@ class AdminBody extends StatefulWidget {
   _AdminBodyState createState() => _AdminBodyState();
 }
 
+
 class _AdminBodyState extends State<AdminBody> {
   int _currentTabIndex = 0;
+
+@override
+  void initState() {
+    super.initState();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -36,6 +47,7 @@ class _AdminBodyState extends State<AdminBody> {
     ];
     assert(_kTabPages.length == _kBottmonNavBarItems.length);
     final bottomNavBar = BottomNavigationBar(
+      // selectedItemColor: kButtonColor,
       backgroundColor: kButtonColor,
       fixedColor: Colors.black,
       items: _kBottmonNavBarItems,
