@@ -29,6 +29,14 @@ class UserRespository {
     return UserGetAllFailed(errorMessage: "Cannot get data");
   }
 
+  Future<UserState> getUser(String uid) async{
+    UserApp user =  await userAPI.getUser(uid);
+    if(user!=null){
+      return UserGetUserSuccess(user: user);
+    }
+    return UserGetUserFailed(errorMessage: "Cannot get data");
+  }
+
   UserState checkUser(String key, UserApp newUser) {
     try {
       userAPI.checkUser(key, newUser);
@@ -36,8 +44,6 @@ class UserRespository {
     } catch (e) {
       return UserCheckFailed();
     }
-    
-    
   }
 
   Future<bool> isExistAdmin(String email) async {

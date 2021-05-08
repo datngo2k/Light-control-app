@@ -27,6 +27,9 @@ class RegisterBody extends StatelessWidget {
         else {
           final snackBar = SnackBar(content: Text("Đăng kí tài khoản thành công"));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.of(context).pushNamed(
+                      '/login',
+                    );
         }
         
       },
@@ -38,6 +41,7 @@ class RegisterBody extends StatelessWidget {
               Text("SIGN UP", style: kBigTextStyle),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
+                textInputType: TextInputType.emailAddress,
                 icon: Icons.email,
                 hintText: "Email",
                 onChanged: (value) {
@@ -63,6 +67,7 @@ class RegisterBody extends StatelessWidget {
                 },
               ),
               RoundedInputField(
+                textInputType: TextInputType.phone,
                 icon: Icons.phone,
                 hintText: "Phone number",
                 onChanged: (value) {

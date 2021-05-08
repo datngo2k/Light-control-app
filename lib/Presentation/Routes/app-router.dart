@@ -9,17 +9,17 @@ class AppRouter {
 
   Route onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
+      // case '/':
+      //   return MaterialPageRoute(
+      //     builder: (_) => LoginScreen(),
+      //   );
+      //   break;
+      // case '/register':
+      //   return MaterialPageRoute(
+      //     builder: (_) => RegisterScreen(),
+      //   );
+      //   break;
       case '/':
-        return MaterialPageRoute(
-          builder: (_) => LoginScreen(),
-        );
-        break;
-      case '/register':
-        return MaterialPageRoute(
-          builder: (_) => RegisterScreen(),
-        );
-        break;
-      case '/admin':
         return MaterialPageRoute(
           builder: (_) => AdminScreen(),
         );

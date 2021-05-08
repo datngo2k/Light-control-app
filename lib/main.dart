@@ -9,6 +9,8 @@ import 'package:light_controller_app/Logic/User/cubit/user_cubit.dart';
 import 'package:light_controller_app/Presentation/Routes/app-router.dart';
 import 'package:light_controller_app/Presentation/Screens/Login/login_screen.dart';
 
+import 'Logic/Room/cubit/room_cubit.dart';
+
 void main() async {
   AppRouter appRouter = AppRouter();
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +42,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<UserCubit>(
           create: (context) => UserCubit(),
+        ),
+        BlocProvider<RoomCubit>(
+          create: (context) => RoomCubit(),
         ),
       ],
       child: MaterialApp(

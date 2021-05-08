@@ -13,9 +13,20 @@ class UserCubit extends Cubit<UserState> {
 
   void getAllUsers() async{
     UserState state = await userRespository.getAllUsers();
+    // print(state);
+    emit(state);
+  }
+  void getUser(String uid) async{
+    UserState state = await userRespository.getUser(uid);
+    print("dat");
     print(state);
     emit(state);
   }
+  void updateUser(UserApp user) async{
+    userRespository.checkUser(user.uid, user);
+    getUser(user.uid);
+  }
+
   void checkUser(String key, UserApp user) async{
     if(user.isActive == 1){
       user.isActive = 0;

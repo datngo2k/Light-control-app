@@ -9,7 +9,6 @@ class UserApp {
   String fullName;
   String phone;
   String uid;
-  String key;
 
   UserApp({
     @required this.email,
@@ -17,7 +16,6 @@ class UserApp {
     @required this.phone,
     @required this.isActive,
     this.uid,
-    this.key
   });
   Map<String, dynamic> toJson() {
     return {

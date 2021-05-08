@@ -24,8 +24,8 @@ class UserScreen extends StatelessWidget {
                 FlatButton(
                   onPressed: () {
                     BlocProvider.of<AuthCubit>(context).signOut();
-                    // Navigator.of(context).pop(true);
-                    exit(0);
+                    Navigator.of(context).pop(true);
+                    // exit(0);
                   },
                   
                   child: Text('Yes'),

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +76,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   onPressed: () {
                                     BlocProvider.of<UserCubit>(context)
                                         .checkUser(
-                                            users[index].key, users[index]);
+                                            users[index].uid, users[index]);
                                   },
                                 ),
                               ),
@@ -89,7 +87,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   onPressed: () {
                                     BlocProvider.of<UserCubit>(context)
                                         .checkUser(
-                                            users[index].key, users[index]);
+                                            users[index].uid, users[index]);
                                   },
                                 ),
                               ),

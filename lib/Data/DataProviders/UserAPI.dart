@@ -28,7 +28,7 @@ class UserAPI {
   }
 
   void createUser(UserApp user) {
-    _userRef.push().set(user.toJson());
+    _userRef.child(user.uid).set(user.toJson());
   }
 
   Future<List<UserApp>> getAllUsers() async {
@@ -38,7 +38,6 @@ class UserAPI {
     var values = dataSnapshot.value;
     for (var key in keys) {
       UserApp user = UserApp.fromSnapshot(values[key]);
-      user.key = key;
       users.add(user);
     }
     return users;
@@ -91,6 +90,20 @@ class UserAPI {
       }
     });
     return flag;
+  }
+
+  Future<UserApp> getUser(String uid) async {
+    UserApp user;
+    await _userRef
+        .orderByChild("uid")
+        .equalTo(uid)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      if (dataSnapshot.value != null) {
+        user = UserApp.fromSnapshot(dataSnapshot.value.entries.elementAt(0).value);
+      }
+    });
+    return user;
   }
 
   Future<void> signOut() async {

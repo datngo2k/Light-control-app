@@ -23,15 +23,15 @@ class _UserBodyState extends State<UserBody> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
      final _kTabPages = <Widget>[
-      AccountScreen(),
-      RoomScreen(),
       DeviceScreen(),
+      RoomScreen(),
+      AccountScreen(),
       HistoryScreen(),
     ];
     final _kBottmonNavBarItems = <BottomNavigationBarItem>[
-      const BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Account'),
+      const BottomNavigationBarItem(icon: Icon(Icons.meeting_room), label: 'Devices'), 
       const BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Schedule'),
-      const BottomNavigationBarItem(icon: Icon(Icons.meeting_room), label: 'Devices'),
+      const BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Account'),
       const BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
     ];
     assert(_kTabPages.length == _kBottmonNavBarItems.length);

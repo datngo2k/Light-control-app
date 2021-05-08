@@ -20,6 +20,18 @@ class UserGetAllFailed extends UserState {
   @override
   List<Object> get props => [errorMessage];
 }
+class UserGetUserSuccess extends UserState {
+  final UserApp user;
+  UserGetUserSuccess({this.user});
+  @override
+  List<Object> get props => [user];
+}
+class UserGetUserFailed extends UserState {
+  final String errorMessage;
+  UserGetUserFailed({this.errorMessage});
+  @override
+  List<Object> get props => [errorMessage];
+}
 class UserCheckSuccess extends UserState {}
 class UserCheckFailed extends UserState {}
 class UserDeleteSuccess extends UserState {}
