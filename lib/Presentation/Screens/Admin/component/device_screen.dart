@@ -20,7 +20,6 @@ class DeviceScreen extends StatefulWidget {
 String roomId;
 final TextEditingController _roomIdController = TextEditingController();
 List<Room> rooms;
-List<Device> devices = [];
 
 class _DeviceScreenState extends State<DeviceScreen> {
   Future<void> _addRoomDialog(BuildContext context) async {
@@ -91,11 +90,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
           rooms = state.rooms;
           return ListView.builder(
             itemCount: rooms.length,
-            itemBuilder: (context, index) {
-              List<Device> newDevices = [];
-              newDevices += rooms[index].bulbs;
-              newDevices += rooms[index].sensors;
-              devices = new List.from(newDevices.reversed);
+            itemBuilder: (context, roomIndex) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ExpansionTileCard(
@@ -103,12 +98,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   expandedColor: kBaseColor,
                   leading: Icon(Icons.account_circle),
                   title: Text(
-                    "${rooms[index].id}",
+                    "${rooms[roomIndex].id}",
                     style: kTextStyle,
                   ),
-                  // trailing: rooms[index].isActive == 1
-                  //     ? Icon(Icons.check_circle)
-                  //     : Icon(Icons.check_circle_outline),
                   children: <Widget>[
                     Divider(
                       thickness: 1.0,
@@ -129,57 +121,95 @@ class _DeviceScreenState extends State<DeviceScreen> {
                             ),
                             color: kExpansionColor,
                             width: double.infinity,
-                            child: SingleChildScrollView(
-                              child: GridView.builder(
-                                  gridDelegate:
-                                      SliverGridDelegateWithMaxCrossAxisExtent(
-                                          maxCrossAxisExtent: 90,
-                                          childAspectRatio: 1,
-                                          crossAxisSpacing: 10,
-                                          mainAxisSpacing: 10),
-                                  itemCount: devices.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (BuildContext ctx, index) {
-                                    return GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: Column(children: [
-                                          Visibility(
-                                            visible: (devices[index] is Bulb),
-                                            child: Image.asset(
-                                              "asset/img/light.png",
-                                              height: 40,
-                                            ),
+                            child: Column(
+                              children: [
+                                SingleChildScrollView(
+                                  child: GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithMaxCrossAxisExtent(
+                                              maxCrossAxisExtent: 90,
+                                              childAspectRatio: 1,
+                                              crossAxisSpacing: 10,
+                                              mainAxisSpacing: 10),
+                                      itemCount: rooms[roomIndex].bulbs.length,
+                                      shrinkWrap: true,
+                                      itemBuilder:
+                                          (BuildContext ctx, deviceIndex) {
+                                        return GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: Column(children: [
+                                              Image.asset(
+                                                "asset/img/light.png",
+                                                height: 40,
+                                              ),
+                                              // Visibility(
+                                              //   visible: (rooms[roomIndex].bulbs[deviceIndex] is Sensor),
+                                              //   child: Column(
+                                              //     children: [
+                                              //       SizedBox(height: 5),
+                                              //       SvgPicture.asset(
+                                              //         "asset/img/sensor.svg",
+                                              //         height: 30,
+                                              //       ),
+                                              //       SizedBox(height: 7),
+                                              //     ],
+                                              //   ),
+                                              // ),
+                                              Text(
+                                                  "${rooms[roomIndex].bulbs[deviceIndex].getInfo()}"),
+                                            ]),
+                                            decoration: BoxDecoration(
+                                                color: Colors.amber,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
                                           ),
-                                          Visibility(
-                                            visible: (devices[index] is Sensor),
-                                            child: Column(
-                                              children: [
-                                                SizedBox(height: 5),
-                                                SvgPicture.asset(
-                                                  "asset/img/sensor.svg",
-                                                  height: 30,
-                                                ),
-                                                SizedBox(height: 7),
-                                              ],
-                                            ),
+                                        );
+                                      }),
+                                ),
+                                SizedBox(height: 10),
+                                SingleChildScrollView(
+                                  child: GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithMaxCrossAxisExtent(
+                                              maxCrossAxisExtent: 90,
+                                              childAspectRatio: 1,
+                                              crossAxisSpacing: 10,
+                                              mainAxisSpacing: 10),
+                                      itemCount: rooms[roomIndex].sensors.length,
+                                      shrinkWrap: true,
+                                      itemBuilder:
+                                          (BuildContext ctx, deviceIndex) {
+                                        return GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: Column(children: [
+                                              SizedBox(height: 5),
+                                              SvgPicture.asset(
+                                                "asset/img/sensor.svg",
+                                                height: 30,
+                                              ),
+                                              SizedBox(height: 7),
+                                              Text(
+                                                  "${rooms[roomIndex].sensors[deviceIndex].getInfo()}"),
+                                            ]),
+                                            decoration: BoxDecoration(
+                                                color: Colors.amber,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
                                           ),
-                                          Text("${devices[index].getInfo()}"),
-                                        ]),
-                                        decoration: BoxDecoration(
-                                            color: Colors.amber,
-                                            borderRadius:
-                                                BorderRadius.circular(15)),
-                                      ),
-                                    );
-                                  }),
+                                        );
+                                      }),
+                                ),
+                              ],
                             ),
                           ),
                           IconButton(
                             icon: Icon(Icons.add_box),
                             onPressed: () {
-                              _addDeviceDialog(context, rooms[index].id);
+                              _addDeviceDialog(context, rooms[roomIndex].id);
                             },
                           ),
                         ]),
