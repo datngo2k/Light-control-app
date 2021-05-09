@@ -1,6 +1,10 @@
 import 'dart:convert';
 
-class Bulb {
+import 'package:light_controller_app/Data/Models/Device.dart';
+
+
+
+class Bulb extends Device{
   String id;
   bool currentStatus;
   int intensity;
@@ -15,13 +19,16 @@ class Bulb {
     };
   }
 
-  factory Bulb.fromMap(Map<String, dynamic> map) {
+  factory Bulb.fromSnapshot(value) {
     return Bulb(
-      id: map['id'],
-      currentStatus: map['currentStatus'],
-      intensity: map['intensity'],
+      id: value['id'],
+      currentStatus: value['currentStatus'],
+      intensity: value['intensity'],
     );
   }
 
-  factory Bulb.fromJson(String source) => Bulb.fromMap(json.decode(source));
+  @override
+  String getInfo() {
+    return "$id";
+  }
 }

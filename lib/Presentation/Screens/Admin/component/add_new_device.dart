@@ -1,7 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:light_controller_app/Data/Models/Bulb.dart';
+import 'package:light_controller_app/Data/Models/Sensor.dart';
+import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 
 class AddNewDeviceDialog extends StatefulWidget {
+  final String roomId;
+  AddNewDeviceDialog({@required this.roomId});
   @override
   _AddNewDeviceDialogState createState() => _AddNewDeviceDialogState();
 }
@@ -9,7 +15,7 @@ class AddNewDeviceDialog extends StatefulWidget {
 class _AddNewDeviceDialogState extends State<AddNewDeviceDialog> {
   final TextEditingController _deviceIdController = TextEditingController();
   String deviceType = "Bulb";
-  double intensity = 0;
+  int intensity = 255;
   String deviceId;
   static const menuItems = <String>["Bulb", "Sensor"];
   final List<DropdownMenuItem<String>> _dropDownMenuItems = menuItems
@@ -52,15 +58,23 @@ class _AddNewDeviceDialogState extends State<AddNewDeviceDialog> {
           ),
           Visibility(
             visible: (deviceType == "Bulb"),
-            child: Slider(
-              value: intensity,
-              min: 0,
-              max: 255.0,
-              onChanged: (double newValue) {
-                setState(() {
-                  intensity = newValue;
-                });
-              },
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text("Max intensity: $intensity"),
+                Slider(
+                  value: intensity.toDouble(),
+                  min: 0,
+                  max: 255.0,
+                  onChanged: (double newValue) {
+                    setState(() {
+                      intensity = newValue.round();
+                    });
+                  },
+                ),
+              ],
             ),
           )
         ],
@@ -82,10 +96,31 @@ class _AddNewDeviceDialogState extends State<AddNewDeviceDialog> {
           child: Text('Add'),
           onPressed: () {
             setState(() {
-              // Room room = Room(
-              //     id: _roomIdController.text, sensors: [], bulbs: []);
-              // BlocProvider.of<RoomCubit>(context).addNewRoom(room);
-              Navigator.pop(context);
+              if (_deviceIdController.text != "") {
+                deviceId = _deviceIdController.text;
+                // Room room = Room(
+                //     id: _roomIdController.text, sensors: [], bulbs: []);
+                if (deviceType == "Bulb") {
+                  Bulb bulb = Bulb(
+                      id: deviceId,
+                      intensity: intensity,
+                      currentStatus: false);
+                  BlocProvider.of<RoomCubit>(context)
+                      .addNewBulb(widget.roomId, bulb);
+                } else {
+                  Sensor sensor = Sensor(
+                      id: deviceId,
+                      currentValue: "Default");
+                  BlocProvider.of<RoomCubit>(context)
+                      .addNewSensor(widget.roomId, sensor);
+                }
+
+                Navigator.pop(context);
+              } else {
+                final snackBar =
+                    SnackBar(content: Text("Vui lòng điền deviceID"));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
             });
           },
         ),

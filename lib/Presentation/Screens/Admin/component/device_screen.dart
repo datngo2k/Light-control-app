@@ -2,7 +2,11 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:light_controller_app/Data/Models/Bulb.dart';
+import 'package:light_controller_app/Data/Models/Device.dart';
 import 'package:light_controller_app/Data/Models/Room.dart';
+import 'package:light_controller_app/Data/Models/Sensor.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 import 'package:light_controller_app/Presentation/Screens/Admin/component/add_new_device.dart';
 import 'package:light_controller_app/Presentation/components/rounded_input_field_with_icon.dart';
@@ -16,15 +20,9 @@ class DeviceScreen extends StatefulWidget {
 String roomId;
 final TextEditingController _roomIdController = TextEditingController();
 List<Room> rooms;
-
-
-
-
+List<Device> devices = [];
 
 class _DeviceScreenState extends State<DeviceScreen> {
-
-
-
   Future<void> _addRoomDialog(BuildContext context) async {
     return showDialog(
         context: context,
@@ -69,12 +67,13 @@ class _DeviceScreenState extends State<DeviceScreen> {
         });
   }
 
-  Future<void> _addDeviceDialog(BuildContext context) async {
-    
+  Future<void> _addDeviceDialog(BuildContext context, String roomId) async {
     return showDialog(
         context: context,
         builder: (_) {
-          return AddNewDeviceDialog();
+          return AddNewDeviceDialog(
+            roomId: roomId,
+          );
         });
   }
 
@@ -93,6 +92,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
           return ListView.builder(
             itemCount: rooms.length,
             itemBuilder: (context, index) {
+              List<Device> newDevices = [];
+              newDevices += rooms[index].bulbs;
+              newDevices += rooms[index].sensors;
+              devices = new List.from(newDevices.reversed);
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ExpansionTileCard(
@@ -134,16 +137,36 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                           childAspectRatio: 1,
                                           crossAxisSpacing: 10,
                                           mainAxisSpacing: 10),
-                                  itemCount: 10,
+                                  itemCount: devices.length,
                                   shrinkWrap: true,
                                   itemBuilder: (BuildContext ctx, index) {
                                     return GestureDetector(
-                                      onTap: () {
-                                        _addRoomDialog(context);
-                                      },
+                                      onTap: () {},
                                       child: Container(
                                         alignment: Alignment.center,
-                                        child: Text("dat"),
+                                        child: Column(children: [
+                                          Visibility(
+                                            visible: (devices[index] is Bulb),
+                                            child: Image.asset(
+                                              "asset/img/light.png",
+                                              height: 40,
+                                            ),
+                                          ),
+                                          Visibility(
+                                            visible: (devices[index] is Sensor),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 5),
+                                                SvgPicture.asset(
+                                                  "asset/img/sensor.svg",
+                                                  height: 30,
+                                                ),
+                                                SizedBox(height: 7),
+                                              ],
+                                            ),
+                                          ),
+                                          Text("${devices[index].getInfo()}"),
+                                        ]),
                                         decoration: BoxDecoration(
                                             color: Colors.amber,
                                             borderRadius:
@@ -156,7 +179,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                           IconButton(
                             icon: Icon(Icons.add_box),
                             onPressed: () {
-                              _addDeviceDialog(context);
+                              _addDeviceDialog(context, rooms[index].id);
                             },
                           ),
                         ]),

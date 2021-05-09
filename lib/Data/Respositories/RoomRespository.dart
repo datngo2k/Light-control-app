@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:light_controller_app/Data/DataProviders/RoomAPI.dart';
+import 'package:light_controller_app/Data/Models/Bulb.dart';
 import 'package:light_controller_app/Data/Models/Room.dart';
+import 'package:light_controller_app/Data/Models/Sensor.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 
 
@@ -14,6 +16,24 @@ class RoomRespository {
       return RoomAddNewRoomSuccess();
     } catch (e) {
       return RoomAddNewRoomFailed(errorMessage: e.message);
+    }
+    
+  }
+  RoomState addNewBulb(String roomId, Bulb bulb) {
+    try {
+      roomAPI.addNewBulb(roomId, bulb);
+      return RoomAddNewDeviceSuccess();
+    } catch (e) {
+      return RoomAddNewDeviceFailed(errorMessage: e.message);
+    }
+    
+  }
+  RoomState addNewSensor(String roomId, Sensor sensor) {
+    try {
+      roomAPI.addNewSensor(roomId, sensor);
+      return RoomAddNewDeviceSuccess();
+    } catch (e) {
+      return RoomAddNewDeviceFailed(errorMessage: e.message);
     }
     
   }

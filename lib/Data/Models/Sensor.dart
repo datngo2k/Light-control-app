@@ -1,32 +1,36 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:light_controller_app/Data/Models/Device.dart';
 
-import 'package:light_controller_app/Data/Models/SensorHistory.dart';
+// import 'package:light_controller_app/Data/Models/SensorHistory.dart';
 
-class Sensor {
+class Sensor extends Device{
   String id;
   String currentValue;
-  List<SensorHistory> sensorHistory;
+  // List<SensorHistory> sensorHistory;
 
-  Sensor({@required this.id, this.currentValue, this.sensorHistory});
+  Sensor({@required this.id, this.currentValue});
 
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'currentValue': currentValue,
-      'sensorHistory': sensorHistory?.map((x) => x.toMap())?.toList(),
+      // 'sensorHistory': sensorHistory?.map((x) => x.toMap())?.toList(),
     };
   }
 
-  factory Sensor.fromMap(Map<String, dynamic> map) {
+  factory Sensor.fromSnapshot(value) {
     return Sensor(
-      id: map['id'],
-      currentValue: map['currentValue'],
-      sensorHistory: List<SensorHistory>.from(map['sensorHistory']?.map((x) => SensorHistory.fromMap(x))),
+      id: value['id'],
+      currentValue: value['currentValue'],
+      // sensorHistory: List<SensorHistory>.from(map['sensorHistory']?.map((x) => SensorHistory.fromMap(x))),
     );
   }
 
-  factory Sensor.fromJson(String source) => Sensor.fromMap(json.decode(source));
+    @override
+  String getInfo() {
+    return "$id";
+  }
 }
