@@ -16,6 +16,12 @@ const kTextStyle = TextStyle(
   fontFamily: "Mullish",
   fontWeight: FontWeight.bold,
 );
+const kTextTimeStyle = TextStyle(
+  color: Colors.black,
+  fontSize: 20.0,
+  fontFamily: "Mullish",
+  fontWeight: FontWeight.normal,
+);
 const kTextOnStyle = TextStyle(
   color: Colors.green,
   fontSize: 20.0,

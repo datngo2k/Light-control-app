@@ -19,8 +19,6 @@ class Room {
     };
   }
 
-  
-
   factory Room.fromSnapshot(value) {
 
     return Room(

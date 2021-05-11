@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:light_controller_app/Data/Models/Bulb.dart';
 import 'package:light_controller_app/Data/Models/Device.dart';
 import 'package:light_controller_app/Data/Models/Room.dart';
+import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Data/Models/Sensor.dart';
 import 'package:light_controller_app/Data/Respositories/RoomRespository.dart';
 
@@ -25,6 +26,11 @@ class RoomCubit extends Cubit<RoomState> {
   void addNewSensor(String roomId, Sensor sensor) {
     RoomState state = roomRespository.addNewSensor(roomId, sensor);
     print(state);
+    getAllRooms();
+  }
+  void addSchedule(Schedule schedule) {
+    RoomState state = roomRespository.addNewSchedule(schedule);
+    emit(state);
     getAllRooms();
   }
   void updateBulb(String roomId, Bulb bulb) {

@@ -8,28 +8,50 @@ abstract class RoomState extends Equatable {
 }
 
 class RoomInitial extends RoomState {}
+
 class RoomAddNewRoomSuccess extends RoomState {}
+
 class RoomAddNewRoomFailed extends RoomState {
   final String errorMessage;
   RoomAddNewRoomFailed({this.errorMessage});
   @override
   List<Object> get props => [errorMessage];
 }
+
 class RoomAddNewDeviceSuccess extends RoomState {}
+
 class RoomAddNewDeviceFailed extends RoomState {
   final String errorMessage;
   RoomAddNewDeviceFailed({this.errorMessage});
   @override
   List<Object> get props => [errorMessage];
 }
+
+class RoomAddScheduleSuccess extends RoomState {
+  final String message;
+  RoomAddScheduleSuccess({this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class RoomAddScheduleFailed extends RoomState {
+  final String errorMessage;
+  RoomAddScheduleFailed({this.errorMessage});
+  @override
+  List<Object> get props => [errorMessage];
+}
+
 class RoomRemoveDeviceSuccess extends RoomState {}
+
 class RoomRemoveDeviceFailed extends RoomState {
   final String errorMessage;
   RoomRemoveDeviceFailed({this.errorMessage});
   @override
   List<Object> get props => [errorMessage];
 }
+
 class RoomUpdateDeviceSuccess extends RoomState {}
+
 class RoomUpdateDeviceFailed extends RoomState {
   final String errorMessage;
   RoomUpdateDeviceFailed({this.errorMessage});
@@ -37,14 +59,13 @@ class RoomUpdateDeviceFailed extends RoomState {
   List<Object> get props => [errorMessage];
 }
 
-
-
 class RoomGetAllSuccess extends RoomState {
   final List<Room> rooms;
   RoomGetAllSuccess({this.rooms});
   @override
   List<Object> get props => [rooms];
 }
+
 class RoomGetAllFailed extends RoomState {
   final String errorMessage;
   RoomGetAllFailed({this.errorMessage});

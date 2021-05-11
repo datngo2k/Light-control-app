@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:light_controller_app/Data/DataProviders/RoomAPI.dart';
 import 'package:light_controller_app/Data/Models/Bulb.dart';
 import 'package:light_controller_app/Data/Models/Room.dart';
+import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Data/Models/Sensor.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 
@@ -34,6 +35,15 @@ class RoomRespository {
       return RoomAddNewDeviceSuccess();
     } catch (e) {
       return RoomAddNewDeviceFailed(errorMessage: e.toString());
+    }
+    
+  }
+  RoomState addNewSchedule(Schedule schedule) {
+    try {
+      roomAPI.addNewSchedule(schedule);
+      return RoomAddScheduleSuccess(message: schedule.roomId);
+    } catch (e) {
+      return RoomAddScheduleFailed(errorMessage: e.toString());
     }
     
   }

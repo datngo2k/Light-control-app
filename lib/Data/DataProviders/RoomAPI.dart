@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:light_controller_app/Data/Models/Bulb.dart';
 import 'package:light_controller_app/Data/Models/Device.dart';
 import 'package:light_controller_app/Data/Models/Room.dart';
+import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Data/Models/Sensor.dart';
 
 class RoomAPI {
@@ -72,6 +73,16 @@ class RoomAPI {
         .child("sensor")
         .child(sensor.id)
         .set(sensor.toJson());
+  }
+
+  void addNewSchedule(Schedule schedule) {
+    print("schedule.roomId");
+    print(schedule.roomId);
+    _roomRef
+        .child(schedule.roomId)
+        .child("schedule")
+        .push()
+        .set(schedule.toJson());
   }
 
   void updateBulb(String roomId, Bulb bulb) {
