@@ -27,9 +27,7 @@ class RegisterBody extends StatelessWidget {
         else {
           final snackBar = SnackBar(content: Text("Đăng kí tài khoản thành công"));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          Navigator.of(context).pushNamed(
-                      '/login',
-                    );
+          Navigator.pop(context);
         }
         
       },

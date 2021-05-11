@@ -12,6 +12,9 @@ import 'package:light_controller_app/Presentation/Screens/Admin/component/add_ne
 import 'package:light_controller_app/Presentation/components/rounded_input_field_with_icon.dart';
 import 'package:light_controller_app/constant/constant.dart';
 
+import 'info_bulb.dart';
+import 'info_sensor.dart';
+
 class DeviceScreen extends StatefulWidget {
   @override
   _DeviceScreenState createState() => _DeviceScreenState();
@@ -71,6 +74,26 @@ class _DeviceScreenState extends State<DeviceScreen> {
         context: context,
         builder: (_) {
           return AddNewDeviceDialog(
+            roomId: roomId,
+          );
+        });
+  }
+  Future<void> _bulbInfoDialog(BuildContext context, Bulb bulb, String roomId) async {
+    return showDialog(
+        context: context,
+        builder: (_) {
+          return BulbInfoDialog(
+            bulb: bulb,
+            roomId: roomId,
+          );
+        });
+  }
+  Future<void> _sensorInfoDialog(BuildContext context, Sensor sensor, String roomId) async {
+    return showDialog(
+        context: context,
+        builder: (_) {
+          return SensorInfoDialog(
+            sensor: sensor,
             roomId: roomId,
           );
         });
@@ -136,7 +159,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                       itemBuilder:
                                           (BuildContext ctx, deviceIndex) {
                                         return GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            _bulbInfoDialog(context, rooms[roomIndex].bulbs[deviceIndex], rooms[roomIndex].id);
+                                          },
                                           child: Container(
                                             alignment: Alignment.center,
                                             child: Column(children: [
@@ -144,19 +169,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                                 "asset/img/light.png",
                                                 height: 40,
                                               ),
-                                              // Visibility(
-                                              //   visible: (rooms[roomIndex].bulbs[deviceIndex] is Sensor),
-                                              //   child: Column(
-                                              //     children: [
-                                              //       SizedBox(height: 5),
-                                              //       SvgPicture.asset(
-                                              //         "asset/img/sensor.svg",
-                                              //         height: 30,
-                                              //       ),
-                                              //       SizedBox(height: 7),
-                                              //     ],
-                                              //   ),
-                                              // ),
                                               Text(
                                                   "${rooms[roomIndex].bulbs[deviceIndex].getInfo()}"),
                                             ]),
@@ -182,7 +194,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                       itemBuilder:
                                           (BuildContext ctx, deviceIndex) {
                                         return GestureDetector(
-                                          onTap: () {},
+                                          onTap: () {
+                                            _sensorInfoDialog(context, rooms[roomIndex].sensors[deviceIndex], rooms[roomIndex].id);
+                                          },
                                           child: Container(
                                             alignment: Alignment.center,
                                             child: Column(children: [

@@ -23,10 +23,6 @@ class AdminBody extends StatefulWidget {
 class _AdminBodyState extends State<AdminBody> {
   int _currentTabIndex = 0;
 
-@override
-  void initState() {
-    super.initState();
-  }
 
 
 

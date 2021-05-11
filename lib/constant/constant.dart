@@ -16,6 +16,18 @@ const kTextStyle = TextStyle(
   fontFamily: "Mullish",
   fontWeight: FontWeight.bold,
 );
+const kTextOnStyle = TextStyle(
+  color: Colors.green,
+  fontSize: 20.0,
+  fontFamily: "Mullish",
+  fontWeight: FontWeight.bold,
+);
+const kTextOffStyle = TextStyle(
+  color: Colors.red,
+  fontSize: 20.0,
+  fontFamily: "Mullish",
+  fontWeight: FontWeight.bold,
+);
 const kBigTextStyle = TextStyle(
   color: Colors.black,
   fontSize: 36,

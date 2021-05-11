@@ -15,7 +15,7 @@ class RoomRespository {
       roomAPI.createRoom(room);
       return RoomAddNewRoomSuccess();
     } catch (e) {
-      return RoomAddNewRoomFailed(errorMessage: e.message);
+      return RoomAddNewRoomFailed(errorMessage: e.toString());
     }
     
   }
@@ -24,7 +24,7 @@ class RoomRespository {
       roomAPI.addNewBulb(roomId, bulb);
       return RoomAddNewDeviceSuccess();
     } catch (e) {
-      return RoomAddNewDeviceFailed(errorMessage: e.message);
+      return RoomAddNewDeviceFailed(errorMessage: e.toString());
     }
     
   }
@@ -33,9 +33,43 @@ class RoomRespository {
       roomAPI.addNewSensor(roomId, sensor);
       return RoomAddNewDeviceSuccess();
     } catch (e) {
-      return RoomAddNewDeviceFailed(errorMessage: e.message);
+      return RoomAddNewDeviceFailed(errorMessage: e.toString());
     }
     
+  }
+  RoomState updateBulb(String roomId, Bulb bulb) {
+    try {
+      roomAPI.updateBulb(roomId, bulb);
+      return RoomUpdateDeviceSuccess();
+    } catch (e) {
+      return RoomUpdateDeviceFailed(errorMessage: e.toString());
+    }
+    
+  }
+  RoomState updateSensor(String roomId, Sensor sensor) {
+    try {
+      roomAPI.addNewSensor(roomId, sensor);
+      return RoomUpdateDeviceSuccess();
+    } catch (e) {
+      return RoomUpdateDeviceFailed(errorMessage: e.toString());
+    }
+  }
+  RoomState removeBulb(String roomId, Bulb bulb) {
+    try {
+      roomAPI.removeBulb(roomId, bulb);
+      return RoomRemoveDeviceSuccess();
+    } catch (e) {
+      return RoomRemoveDeviceFailed(errorMessage: e.toString());
+    }
+    
+  }
+  RoomState removeSensor(String roomId, Sensor sensor) {
+    try {
+      roomAPI.removeSensor(roomId, sensor);
+      return RoomRemoveDeviceSuccess();
+    } catch (e) {
+      return RoomRemoveDeviceFailed(errorMessage: e.toString());
+    }
   }
 
     Future<RoomState> getAllRooms() async{

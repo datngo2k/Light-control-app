@@ -73,4 +73,26 @@ class RoomAPI {
         .child(sensor.id)
         .set(sensor.toJson());
   }
+
+  void updateBulb(String roomId, Bulb bulb) {
+    _roomRef.child(roomId).child("bulb").child(bulb.id).update(bulb.toJson());
+  }
+
+  void updateSensor(String roomId, Sensor sensor) {
+    _roomRef
+        .child(roomId)
+        .child("sensor")
+        .child(sensor.id)
+        .update(sensor.toJson());
+  }
+
+  void removeBulb(String roomId, Bulb bulb) {
+    
+    print(bulb.id);
+    _roomRef.child(roomId).child("bulb").child(bulb.id).remove();
+  }
+
+  void removeSensor(String roomId, Sensor sensor) {
+    _roomRef.child(roomId).child("sensor").child(sensor.id).remove();
+  }
 }
