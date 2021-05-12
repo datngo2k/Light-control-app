@@ -27,19 +27,6 @@ class RoomAddNewDeviceFailed extends RoomState {
   List<Object> get props => [errorMessage];
 }
 
-class RoomAddScheduleSuccess extends RoomState {
-  final String message;
-  RoomAddScheduleSuccess({this.message});
-  @override
-  List<Object> get props => [message];
-}
-
-class RoomAddScheduleFailed extends RoomState {
-  final String errorMessage;
-  RoomAddScheduleFailed({this.errorMessage});
-  @override
-  List<Object> get props => [errorMessage];
-}
 
 class RoomRemoveDeviceSuccess extends RoomState {}
 

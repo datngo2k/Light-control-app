@@ -119,7 +119,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                 child: ExpansionTileCard(
                   baseColor: kBaseColor,
                   expandedColor: kBaseColor,
-                  leading: Icon(Icons.account_circle),
+                  leading: Icon(Icons.meeting_room),
                   title: Text(
                     "${rooms[roomIndex].id}",
                     style: kTextStyle,

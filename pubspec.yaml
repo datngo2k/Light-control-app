@@ -39,6 +39,11 @@ dependencies:
   expansion_tile_card: ^1.1.0
   flutter_calendar_carousel: ^2.0.1
   dropdown_search: ^0.6.1
+  flutter_switch: ^0.3.1
+
+  mqtt_client: ^5.4.0
+  logging: ^0.11.3+2
+  stack_trace: ^1.9.3
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +62,7 @@ flutter:
 
   assets:
     - asset/img/
+    - config/private.json
   fonts:
     - family: Mullish
       fonts:
@@ -64,3 +70,4 @@ flutter:
     - family: Mullish-Bold
       fonts:
       - asset: asset/fonts/Mulish-ExtraBold.ttf
+  

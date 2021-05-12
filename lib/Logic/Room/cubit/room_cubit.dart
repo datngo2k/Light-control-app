@@ -28,11 +28,7 @@ class RoomCubit extends Cubit<RoomState> {
     print(state);
     getAllRooms();
   }
-  void addSchedule(Schedule schedule) {
-    RoomState state = roomRespository.addNewSchedule(schedule);
-    emit(state);
-    getAllRooms();
-  }
+
   void updateBulb(String roomId, Bulb bulb) {
     RoomState state = roomRespository.updateBulb(roomId, bulb);
     print(state);

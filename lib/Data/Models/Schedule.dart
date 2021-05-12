@@ -1,21 +1,23 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-
-import 'package:light_controller_app/Data/Models/User.dart';
 
 class Schedule {
   final String timeCreate;
   final String timeBegin;
   final String timeEnd;
-  final UserApp user;
+  final String userId;
+  final String userName;
+  final String phone;
   final String roomId;
+  final int state;
 
   Schedule({
     @required this.timeCreate,
     @required this.timeBegin,
     @required this.timeEnd,
-    this.user,
+    @required this.userName,
+    @required this.userId,
+    @required this.phone,
+    @required this.state,
     @required this.roomId,
   });
 
@@ -24,8 +26,11 @@ class Schedule {
       'timeCreate': timeCreate,
       'timeBegin': timeBegin,
       'timeEnd': timeEnd,
-      'user': user.toJson(),
       'roomId': roomId,
+      'userName': userName,
+      'userId': userId,
+      'phone': phone,
+      'state': state
     };
   }
 
@@ -35,6 +40,10 @@ class Schedule {
       timeBegin: value['timeBegin'],
       timeEnd: value['timeEnd'],
       roomId: value['roomId'],
+      userId: value['userId'],
+      phone: value['phone'],
+      userName: value['userName'],
+      state: value['state']
     );
   }
 }

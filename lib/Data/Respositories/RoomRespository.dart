@@ -38,15 +38,6 @@ class RoomRespository {
     }
     
   }
-  RoomState addNewSchedule(Schedule schedule) {
-    try {
-      roomAPI.addNewSchedule(schedule);
-      return RoomAddScheduleSuccess(message: schedule.roomId);
-    } catch (e) {
-      return RoomAddScheduleFailed(errorMessage: e.toString());
-    }
-    
-  }
   RoomState updateBulb(String roomId, Bulb bulb) {
     try {
       roomAPI.updateBulb(roomId, bulb);

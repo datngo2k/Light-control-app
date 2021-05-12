@@ -7,6 +7,7 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
+import 'package:light_controller_app/Logic/Schedule/cubit/schedule_cubit.dart';
 import 'package:light_controller_app/Logic/User/cubit/user_cubit.dart';
 import 'package:light_controller_app/Presentation/Screens/User/component/drop_down_button.dart';
 import 'package:light_controller_app/Presentation/components/rounded_button.dart';
@@ -70,24 +71,16 @@ class _RoomScreenState extends State<RoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RoomCubit, RoomState>(
-      listener: (context, state){
-          if(state is RoomAddScheduleSuccess){
-            final snackBar = SnackBar(content: Text("Đăng kí phòng thành công"));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-          else{
-            final snackBar = SnackBar(content: Text("Đăng kí phòng thất bại"));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-      },
-      listenWhen: (previousState, currentState){
-          if(currentState is RoomGetAllSuccess){
-            return false;
-          }
-          return true;
-      },
-      builder: (context, state) {
+    return BlocListener<ScheduleCubit, ScheduleState>(
+        listener: (context, state) {
+      if (state is ScheduleAddScheduleSuccess) {
+        final snackBar = SnackBar(content: Text("Đăng kí phòng thành công"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        final snackBar = SnackBar(content: Text("Đăng kí phòng thất bại"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }, child: BlocBuilder<RoomCubit, RoomState>(builder: (context, state) {
       if (state is RoomGetAllSuccess) {
         List listItem = state.rooms.map((e) => e.id).toList();
         return Column(
@@ -176,21 +169,31 @@ class _RoomScreenState extends State<RoomScreen> {
                                 toTime.hour,
                                 toTime.minute);
                             DateTime createDate = DateTime.now();
-                            if(roomId == null) {
-                              roomId = listItem[0];
+                            if (fromDate.isBefore(createDate) ||
+                                fromDate.isAfter(toDate)) {
+                              final snackBar = SnackBar(
+                                  content:
+                                      Text("Thời gian đăng kí không hợp lệ"));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            } else {
+                              if (roomId == null) {
+                                roomId = listItem[0];
+                              }
+                              if (state is UserGetUserSuccess) {
+                                Schedule schedule = Schedule(
+                                    timeCreate: createDate.toString(),
+                                    timeBegin: fromDate.toString(),
+                                    timeEnd: toDate.toString(),
+                                    userName: state.user.fullName,
+                                    userId: state.user.uid,
+                                    phone: state.user.phone,
+                                    roomId: roomId,
+                                    state: 0);
+                                BlocProvider.of<ScheduleCubit>(context)
+                                    .addSchedule(schedule);
+                              }
                             }
-                            if (state is UserGetUserSuccess) {
-                              Schedule schedule = Schedule(
-                                timeCreate: createDate.toString(),
-                                timeBegin: fromDate.toString(),
-                                timeEnd: toDate.toString(),
-                                user: state.user,
-                                roomId: roomId,
-                              );
-                              BlocProvider.of<RoomCubit>(context)
-                                  .addSchedule(schedule);
-                            }
-
                           },
                           text: "REGISTER");
                     },
@@ -207,6 +210,6 @@ class _RoomScreenState extends State<RoomScreen> {
           ),
         );
       }
-    });
+    }));
   }
 }

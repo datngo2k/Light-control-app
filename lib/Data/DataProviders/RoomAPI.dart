@@ -9,6 +9,7 @@ class RoomAPI {
   static FirebaseDatabase database = new FirebaseDatabase();
   static DatabaseReference _roomRef = database.reference().child('room');
   List<Room> rooms = [];
+  List<Schedule> schedules = [];
 
   void createRoom(Room room) {
     _roomRef.child(room.id).set(room.toJson());
@@ -75,15 +76,25 @@ class RoomAPI {
         .set(sensor.toJson());
   }
 
-  void addNewSchedule(Schedule schedule) {
-    print("schedule.roomId");
-    print(schedule.roomId);
-    _roomRef
-        .child(schedule.roomId)
-        .child("schedule")
-        .push()
-        .set(schedule.toJson());
-  }
+
+  // Future<List<Schedule>> getAllSchedules() async {
+  //   try {
+  //     schedules = [];
+  //     DataSnapshot dataSnapshot = await _roomRef.once();
+  //     var keys = dataSnapshot.value.keys;
+  //     var values = dataSnapshot.value;
+
+  //     for (var key in keys) {
+  //       Room room = Room.fromSnapshot(values[key]);
+  //       if (room != null) {
+  //         rooms.add(room);
+  //       }
+  //     }
+  //     return rooms;
+  //   } catch (e) {
+  //     return [];
+  //   }
+  // }
 
   void updateBulb(String roomId, Bulb bulb) {
     _roomRef.child(roomId).child("bulb").child(bulb.id).update(bulb.toJson());
