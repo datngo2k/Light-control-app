@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:light_controller_app/Data/Models/Bulb.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
+import 'package:light_controller_app/Presentation/Screens/User/Utils/Adafruit_feed.dart';
 import 'package:light_controller_app/Presentation/Screens/User/Utils/mqtt_stream.dart';
 import 'package:light_controller_app/constant/constant.dart';
 
@@ -75,6 +76,18 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
             },
             value: currentStatus,
           ),
+          StreamBuilder(
+              stream: AdafruitFeed.sensorStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+                String reading = snapshot.data;
+                if (reading == null) {
+                  reading = 'no value is available';
+                }
+                return Text(reading);
+              })
         ],
       ),
       actions: <Widget>[
@@ -94,7 +107,7 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
             child: Text('UPDATE'),
             onPressed: () {
               publish(topic, intensity.toString());
-            })
+            }),
       ],
     );
   }
@@ -102,8 +115,8 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
   void subscribe(String topic) {
     myMqtt.subscribe(topic);
   }
-  void unSubscribe(String topic) {
-  }
+
+  void unSubscribe(String topic) {}
 
   void publish(String topic, String value) {
     myMqtt.publish(topic, value);

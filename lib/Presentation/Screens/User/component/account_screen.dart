@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:light_controller_app/Data/Models/User.dart';
 import 'package:light_controller_app/Logic/User/cubit/user_cubit.dart';
+import 'package:light_controller_app/Presentation/Component/CustomAppBar.dart';
 import 'package:light_controller_app/Presentation/components/rounded_button.dart';
 import 'package:light_controller_app/Presentation/components/rounded_input_field_with_icon.dart';
 import 'package:light_controller_app/constant/constant.dart';
@@ -39,54 +40,57 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocBuilder<UserCubit, UserState>(
-      builder: (context, state) {
-        if (state is UserGetUserSuccess) {
-          UserApp user = state.user;
-          _userNameController.text = user.fullName;
-          _phoneController.text = user.phone;
-          return Background(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Email:   ${user.email}         ",
-                    style: kTextStyle,
-                  ),
-                  SizedBox(height: size.height * 0.03),
-                  RoundedInputField(
-                    controller: _userNameController,
-                    hintText: "Full name",
-                    onChanged: (value) {},
-                  ),
-                  RoundedInputField(
-                    textInputType: TextInputType.phone,
-                    controller: _phoneController,
-                    icon: Icons.phone,
-                    hintText: "Phone number",
-                    onChanged: (value) {},
-                  ),
-                  RoundedButton(
-                    text: "Save",
-                    press: () {
-                      user.fullName = _userNameController.text;
-                      user.phone = _phoneController.text;
-                      BlocProvider.of<UserCubit>(context).updateUser(user);
-                    },
-                  ),
-                ],
+    return Scaffold(
+      appBar: CustomAppBar("ACCOUNT", "INFOMATION"),
+          body: BlocBuilder<UserCubit, UserState>(
+        builder: (context, state) {
+          if (state is UserGetUserSuccess) {
+            UserApp user = state.user;
+            _userNameController.text = user.fullName;
+            _phoneController.text = user.phone;
+            return Background(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Email:   ${user.email}         ",
+                      style: kTextStyle,
+                    ),
+                    SizedBox(height: size.height * 0.03),
+                    RoundedInputField(
+                      controller: _userNameController,
+                      hintText: "Full name",
+                      onChanged: (value) {},
+                    ),
+                    RoundedInputField(
+                      textInputType: TextInputType.phone,
+                      controller: _phoneController,
+                      icon: Icons.phone,
+                      hintText: "Phone number",
+                      onChanged: (value) {},
+                    ),
+                    RoundedButton(
+                      text: "Save",
+                      press: () {
+                        user.fullName = _userNameController.text;
+                        user.phone = _phoneController.text;
+                        BlocProvider.of<UserCubit>(context).updateUser(user);
+                      },
+                    ),
+                  ],
+                ),
               ),
+            );
+          } else {
+            return Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.lightBlueAccent,
             ),
           );
-        } else {
-          return Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.lightBlueAccent,
-          ),
-        );
-        }
-      },
+          }
+        },
+      ),
     );
   }
 }

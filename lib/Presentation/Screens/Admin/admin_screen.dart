@@ -5,7 +5,7 @@ import 'package:light_controller_app/Presentation/Screens/Admin/component/admin_
 import 'package:light_controller_app/constant/constant.dart';
 
 class AdminScreen extends StatelessWidget {
-   @override
+  @override
   Widget build(BuildContext context) {
     Future<bool> _onWillPop() {
       return showDialog(
@@ -23,7 +23,6 @@ class AdminScreen extends StatelessWidget {
                     BlocProvider.of<AuthCubit>(context).signOut();
                     Navigator.of(context).pop(true);
                   },
-                  
                   child: Text('Yes'),
                 ),
               ],
@@ -33,27 +32,23 @@ class AdminScreen extends StatelessWidget {
     }
 
     return WillPopScope(
-      onWillPop:  _onWillPop,
+      onWillPop: _onWillPop,
       child: Scaffold(
         backgroundColor: kBackgroundColor,
-        body: AdminBody(),
-        appBar: AppBar(
-          title: Text("Admin Page"),
-          backgroundColor: kButtonColor,
-          // actions: [
-          //   FlatButton.icon(
-          //       onPressed: () {
-          //         _onWillPop();
-          //         BlocProvider.of<AuthCubit>(context).signOut();
-          //         Navigator.pop(context);
-          //       },
-          //       icon: Icon(Icons.person),
-          //       label: Text(
-          //         "Log out",
-          //         style: kTextStyle,
-          //       ))
-          // ],
-        ),
+        body: SafeArea(child: AdminBody()),
+        // actions: [
+        //   FlatButton.icon(
+        //       onPressed: () {
+        //         _onWillPop();
+        //         BlocProvider.of<AuthCubit>(context).signOut();
+        //         Navigator.pop(context);
+        //       },
+        //       icon: Icon(Icons.person),
+        //       label: Text(
+        //         "Log out",
+        //         style: kTextStyle,
+        //       ))
+        // ],
       ),
     );
   }

@@ -15,6 +15,40 @@ class ScheduleAPI {
         .push()
         .set(schedule.toJson());
   }
+
+  Future<List<Schedule>> getAllSchedules() async {
+    schedules = [];
+    DataSnapshot dataSnapshot = await _scheduleRef.once();
+    var keys = dataSnapshot.value.keys;
+    var values = dataSnapshot.value;
+    for (var key in keys) {
+      Schedule schedule = Schedule.fromSnapshot(values[key]);
+      schedule.key = key;
+      schedules.add(schedule);
+    }
+    return schedules;
+  }
+  Future<List<Schedule>> getAllUserSchedules(String userId) async {
+    schedules = [];
+    DataSnapshot dataSnapshot = await _scheduleRef.orderByChild('userId').equalTo(userId).once();
+    if(dataSnapshot.value == null) {
+      return schedules;
+    }
+    var keys = dataSnapshot.value.keys;
+    var values = dataSnapshot.value;
+    for (var key in keys) {
+      Schedule schedule = Schedule.fromSnapshot(values[key]);
+      schedule.key = key;
+      schedules.add(schedule);
+    }
+    return schedules;
+  }
+
+    void acceptSchedule(Schedule schedule){
+    _scheduleRef.child(schedule.key).update(schedule.toJson());
+  }
+
+
   Future<bool> isAlreadySchedule(String userId) async {
     bool flag = false;
     await _scheduleRef

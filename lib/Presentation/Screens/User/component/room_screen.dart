@@ -9,6 +9,8 @@ import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 import 'package:light_controller_app/Logic/Schedule/cubit/schedule_cubit.dart';
 import 'package:light_controller_app/Logic/User/cubit/user_cubit.dart';
+import 'package:light_controller_app/Presentation/Component/CustomAppBar.dart';
+import 'package:light_controller_app/Presentation/Screens/User/component/background.dart';
 import 'package:light_controller_app/Presentation/Screens/User/component/drop_down_button.dart';
 import 'package:light_controller_app/Presentation/components/rounded_button.dart';
 import 'package:light_controller_app/Presentation/components/time_picker_buttom.dart';
@@ -71,145 +73,150 @@ class _RoomScreenState extends State<RoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ScheduleCubit, ScheduleState>(
-        listener: (context, state) {
-      if (state is ScheduleAddScheduleSuccess) {
-        final snackBar = SnackBar(content: Text("Đăng kí phòng thành công"));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      } else {
-        final snackBar = SnackBar(content: Text("Đăng kí phòng thất bại"));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-    }, child: BlocBuilder<RoomCubit, RoomState>(builder: (context, state) {
-      if (state is RoomGetAllSuccess) {
-        List listItem = state.rooms.map((e) => e.id).toList();
-        return Column(
-          children: [
-            Container(
-              child: CalendarCarousel<Event>(
-                onDayPressed: (DateTime date, List<Event> events) {
-                  this.setState(() => _currentDate = date);
-                },
-                weekendTextStyle: TextStyle(
-                  color: Colors.red,
-                ),
-                weekFormat: false,
-                height: 420.0,
-                selectedDateTime: _currentDate,
-                daysHaveCircularBorder: false,
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: DropdownSearch<String>(
-                  mode: Mode.MENU,
-                  showSelectedItem: true,
-                  items: listItem,
-                  onChanged: (value) {
-                    roomId = value;
-                  },
-                  selectedItem: listItem[0]),
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: TimePickerButton(
-                          title: "From:",
-                          text: timeFormater(fromTime),
-                          press: () async {
-                            var time = await _selectTime(context);
-                            if (time != null) {
-                              setState(() {
-                                fromTime = time;
-                              });
-                            }
-                          }),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: TimePickerButton(
-                          title: "To:",
-                          text: timeFormater(toTime),
-                          press: () {
-                            setState(() async {
-                              var time = await _selectTime(context);
-                              if (time != null) {
-                                setState(() {
-                                  toTime = time;
-                                });
-                              }
-                            });
-                          }),
-                    ),
-                  ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10, left: 10),
-              child: Row(
-                children: [
-                  Expanded(child: BlocBuilder<UserCubit, UserState>(
-                    builder: (context, state) {
-                      return RoundedButton(
-                          press: () {
-                            DateTime fromDate = DateTime(
-                                _currentDate.year,
-                                _currentDate.month,
-                                _currentDate.day,
-                                fromTime.hour,
-                                fromTime.minute);
-                            DateTime toDate = DateTime(
-                                _currentDate.year,
-                                _currentDate.month,
-                                _currentDate.day,
-                                toTime.hour,
-                                toTime.minute);
-                            DateTime createDate = DateTime.now();
-                            if (fromDate.isBefore(createDate) ||
-                                fromDate.isAfter(toDate)) {
-                              final snackBar = SnackBar(
-                                  content:
-                                      Text("Thời gian đăng kí không hợp lệ"));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            } else {
-                              if (roomId == null) {
-                                roomId = listItem[0];
-                              }
-                              if (state is UserGetUserSuccess) {
-                                Schedule schedule = Schedule(
-                                    timeCreate: createDate.toString(),
-                                    timeBegin: fromDate.toString(),
-                                    timeEnd: toDate.toString(),
-                                    userName: state.user.fullName,
-                                    userId: state.user.uid,
-                                    phone: state.user.phone,
-                                    roomId: roomId,
-                                    state: 0);
-                                BlocProvider.of<ScheduleCubit>(context)
-                                    .addSchedule(schedule);
-                              }
-                            }
-                          },
-                          text: "REGISTER");
+    return Scaffold(
+      appBar: CustomAppBar("REGISTER", "ROOM"),
+          body: BlocListener<ScheduleCubit, ScheduleState>(
+          listener: (context, state) {
+        if (state is ScheduleAddScheduleSuccess) {
+          final snackBar = SnackBar(content: Text("Đăng kí phòng thành công"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        } else {
+          final snackBar = SnackBar(content: Text("Đăng kí phòng thất bại"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      }, child: BlocBuilder<RoomCubit, RoomState>(builder: (context, state) {
+        if (state is RoomGetAllSuccess) {
+          List listItem = state.rooms.map((e) => e.id).toList();
+          return Background(
+                    child: Column(
+              children: [
+                Container(
+                  child: CalendarCarousel<Event>(
+                    onDayPressed: (DateTime date, List<Event> events) {
+                      this.setState(() => _currentDate = date);
                     },
-                  )),
-                ],
-              ),
-            )
-          ],
-        );
-      } else {
-        return Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.lightBlueAccent,
-          ),
-        );
-      }
-    }));
+                    weekendTextStyle: TextStyle(
+                      color: Colors.red,
+                    ),
+                    weekFormat: false,
+                    height: 420.0,
+                    selectedDateTime: _currentDate,
+                    daysHaveCircularBorder: false,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: DropdownSearch<String>(
+                      mode: Mode.MENU,
+                      showSelectedItem: true,
+                      items: listItem,
+                      onChanged: (value) {
+                        roomId = value;
+                      },
+                      selectedItem: listItem[0]),
+                ),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: TimePickerButton(
+                              title: "From:",
+                              text: timeFormater(fromTime),
+                              press: () async {
+                                var time = await _selectTime(context);
+                                if (time != null) {
+                                  setState(() {
+                                    fromTime = time;
+                                  });
+                                }
+                              }),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: TimePickerButton(
+                              title: "To:",
+                              text: timeFormater(toTime),
+                              press: () {
+                                setState(() async {
+                                  var time = await _selectTime(context);
+                                  if (time != null) {
+                                    setState(() {
+                                      toTime = time;
+                                    });
+                                  }
+                                });
+                              }),
+                        ),
+                      ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10, left: 10),
+                  child: Row(
+                    children: [
+                      Expanded(child: BlocBuilder<UserCubit, UserState>(
+                        builder: (context, state) {
+                          return RoundedButton(
+                              press: () {
+                                DateTime fromDate = DateTime(
+                                    _currentDate.year,
+                                    _currentDate.month,
+                                    _currentDate.day,
+                                    fromTime.hour,
+                                    fromTime.minute);
+                                DateTime toDate = DateTime(
+                                    _currentDate.year,
+                                    _currentDate.month,
+                                    _currentDate.day,
+                                    toTime.hour,
+                                    toTime.minute);
+                                DateTime createDate = DateTime.now();
+                                if (fromDate.isBefore(createDate) ||
+                                    fromDate.isAfter(toDate)) {
+                                  final snackBar = SnackBar(
+                                      content:
+                                          Text("Thời gian đăng kí không hợp lệ"));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                } else {
+                                  if (roomId == null) {
+                                    roomId = listItem[0];
+                                  }
+                                  if (state is UserGetUserSuccess) {
+                                    Schedule schedule = Schedule(
+                                        timeCreate: createDate.toString(),
+                                        timeBegin: fromDate.toString(),
+                                        timeEnd: toDate.toString(),
+                                        userName: state.user.fullName,
+                                        userId: state.user.uid,
+                                        phone: state.user.phone,
+                                        roomId: roomId,
+                                        state: 0);
+                                    BlocProvider.of<ScheduleCubit>(context)
+                                        .addSchedule(schedule);
+                                  }
+                                }
+                              },
+                              text: "REGISTER");
+                        },
+                      )),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.lightBlueAccent,
+            ),
+          );
+        }
+      })),
+    );
   }
 }

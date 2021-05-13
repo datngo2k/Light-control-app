@@ -16,6 +16,12 @@ const kTextStyle = TextStyle(
   fontFamily: "Mullish",
   fontWeight: FontWeight.bold,
 );
+const kTitleDeviceStyle = TextStyle(
+  color: Colors.black,
+  fontSize: 15.0,
+  fontFamily: "Mullish",
+  fontWeight: FontWeight.bold,
+);
 const kTextTimeStyle = TextStyle(
   color: Colors.black,
   fontSize: 20.0,
@@ -38,5 +44,5 @@ const kBigTextStyle = TextStyle(
   color: Colors.black,
   fontSize: 36,
   fontFamily: "Mullish-Bold",
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.bold,
 );

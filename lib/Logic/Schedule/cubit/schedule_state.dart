@@ -22,6 +22,19 @@ class ScheduleAddScheduleFailed extends ScheduleState {
   @override
   List<Object> get props => [errorMessage];
 }
+class ScheduleAcceptScheduleSuccess extends ScheduleState {
+  final String message;
+  ScheduleAcceptScheduleSuccess({this.message});
+  @override
+  List<Object> get props => [message];
+}
+
+class ScheduleAcceptScheduleFailed extends ScheduleState {
+  final String errorMessage;
+  ScheduleAcceptScheduleFailed({this.errorMessage});
+  @override
+  List<Object> get props => [errorMessage];
+}
 
 
 class ScheduleGetAllSuccess extends ScheduleState {

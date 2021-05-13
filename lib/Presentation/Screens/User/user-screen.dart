@@ -40,24 +40,24 @@ class UserScreen extends StatelessWidget {
       onWillPop:  _onWillPop,
       child: Scaffold(
         backgroundColor: kBackgroundColor,
-        body: UserBody(),
-        appBar: AppBar(
-          title: Text("User Page"),
-          backgroundColor: kButtonColor,
-          // actions: [
-          //   FlatButton.icon(
-          //       onPressed: () {
-          //         _onWillPop();
-          //         BlocProvider.of<AuthCubit>(context).signOut();
-          //         Navigator.pop(context);
-          //       },
-          //       icon: Icon(Icons.person),
-          //       label: Text(
-          //         "Log out",
-          //         style: kTextStyle,
-          //       ))
-          // ],
-        ),
+        body: SafeArea(child: UserBody()),
+        // appBar: AppBar(
+        //   title: Text("User Page"),
+        //   backgroundColor: kButtonColor,
+        //   // actions: [
+        //   //   FlatButton.icon(
+        //   //       onPressed: () {
+        //   //         _onWillPop();
+        //   //         BlocProvider.of<AuthCubit>(context).signOut();
+        //   //         Navigator.pop(context);
+        //   //       },
+        //   //       icon: Icon(Icons.person),
+        //   //       label: Text(
+        //   //         "Log out",
+        //   //         style: kTextStyle,
+        //   //       ))
+        //   // ],
+        // ),
       ),
     );
   }

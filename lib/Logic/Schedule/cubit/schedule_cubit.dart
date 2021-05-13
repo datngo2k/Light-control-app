@@ -6,12 +6,37 @@ import 'package:light_controller_app/Data/Respositories/Schedule.Respository.dar
 part 'schedule_state.dart';
 
 class ScheduleCubit extends Cubit<ScheduleState> {
-
   ScheduleRespository scheduleRespository = ScheduleRespository();
   ScheduleCubit() : super(ScheduleInitial());
 
-    void addSchedule(Schedule schedule) {
+  void addSchedule(Schedule schedule) {
     ScheduleState state = scheduleRespository.addNewSchedule(schedule);
     emit(state);
+  }
+
+  void getAllSchedules() async{
+    ScheduleState state = await scheduleRespository.getAllSchedules();
+    print(state);
+    emit(state);
+  }
+  void getAllPendingSchedules() async{
+    ScheduleState state = await scheduleRespository.getAllPendingSchedules();
+    print(state);
+    emit(state);
+  }
+  void getAllUserSchedules(String userId) async{
+    ScheduleState state = await scheduleRespository.getAllUserSchedules(userId);
+    print(state);
+    emit(state);
+  }
+
+
+    void acceptSchedule(Schedule schedule) async{
+    if(schedule.state == 0){
+      schedule.state = 1;
+    }
+    else schedule.state = 0;
+    scheduleRespository.acceptSchedule(schedule);
+    getAllSchedules();
   }
 }

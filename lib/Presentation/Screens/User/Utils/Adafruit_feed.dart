@@ -10,7 +10,7 @@ class AdafruitFeed {
   //
   // A Stream controller alerts the stream when new data is available.
   // The controller should be private.
-  static var _feedController = StreamController<String>();
+  static var _feedController = StreamController<String>.broadcast();
   // Expose the stream so a StreamBuilder and use it.
   static Stream<String> get sensorStream => _feedController.stream;
 //
@@ -24,5 +24,9 @@ class AdafruitFeed {
       log.severe(
           '$value was published to the feed.  Error adding to the Stream: $e');
     }
+  }
+
+  static void dispose(){
+    _feedController.close();
   }
 }
