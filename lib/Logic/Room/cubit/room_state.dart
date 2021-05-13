@@ -59,3 +59,16 @@ class RoomGetAllFailed extends RoomState {
   @override
   List<Object> get props => [errorMessage];
 }
+class RoomGetRoomSuccess extends RoomState {
+  final Room room;
+  RoomGetRoomSuccess({this.room});
+  @override
+  List<Object> get props => [room];
+}
+
+class RoomGetRoomFailed extends RoomState {
+  final String errorMessage;
+  RoomGetRoomFailed({this.errorMessage});
+  @override
+  List<Object> get props => [errorMessage];
+}

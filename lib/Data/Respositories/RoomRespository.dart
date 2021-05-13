@@ -7,7 +7,6 @@ import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Data/Models/Sensor.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 
-
 class RoomRespository {
   static RoomAPI roomAPI = RoomAPI();
 
@@ -18,8 +17,8 @@ class RoomRespository {
     } catch (e) {
       return RoomAddNewRoomFailed(errorMessage: e.toString());
     }
-    
   }
+
   RoomState addNewBulb(String roomId, Bulb bulb) {
     try {
       roomAPI.addNewBulb(roomId, bulb);
@@ -27,8 +26,8 @@ class RoomRespository {
     } catch (e) {
       return RoomAddNewDeviceFailed(errorMessage: e.toString());
     }
-    
   }
+
   RoomState addNewSensor(String roomId, Sensor sensor) {
     try {
       roomAPI.addNewSensor(roomId, sensor);
@@ -36,8 +35,8 @@ class RoomRespository {
     } catch (e) {
       return RoomAddNewDeviceFailed(errorMessage: e.toString());
     }
-    
   }
+
   RoomState updateBulb(String roomId, Bulb bulb) {
     try {
       roomAPI.updateBulb(roomId, bulb);
@@ -45,8 +44,8 @@ class RoomRespository {
     } catch (e) {
       return RoomUpdateDeviceFailed(errorMessage: e.toString());
     }
-    
   }
+
   RoomState updateSensor(String roomId, Sensor sensor) {
     try {
       roomAPI.addNewSensor(roomId, sensor);
@@ -55,6 +54,7 @@ class RoomRespository {
       return RoomUpdateDeviceFailed(errorMessage: e.toString());
     }
   }
+
   RoomState removeBulb(String roomId, Bulb bulb) {
     try {
       roomAPI.removeBulb(roomId, bulb);
@@ -62,8 +62,8 @@ class RoomRespository {
     } catch (e) {
       return RoomRemoveDeviceFailed(errorMessage: e.toString());
     }
-    
   }
+
   RoomState removeSensor(String roomId, Sensor sensor) {
     try {
       roomAPI.removeSensor(roomId, sensor);
@@ -73,12 +73,19 @@ class RoomRespository {
     }
   }
 
-    Future<RoomState> getAllRooms() async{
-    List<Room> rooms =  await roomAPI.getAllRooms();
-    if(rooms!=null){
+  Future<RoomState> getAllRooms() async {
+    List<Room> rooms = await roomAPI.getAllRooms();
+    if (rooms != null) {
       return RoomGetAllSuccess(rooms: rooms);
     }
     return RoomGetAllFailed(errorMessage: "Cannot get data");
   }
- 
+
+  Future<RoomState> getRoom(String roomId) async {
+        Room room = await roomAPI.getRoom(roomId);
+    if (room != null) {
+      return RoomGetRoomSuccess(room: room);
+    }
+    return RoomGetRoomFailed(errorMessage: "Cannot get data");
+  }
 }

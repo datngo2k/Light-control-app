@@ -76,7 +76,6 @@ class RoomAPI {
         .set(sensor.toJson());
   }
 
-
   // Future<List<Schedule>> getAllSchedules() async {
   //   try {
   //     schedules = [];
@@ -109,12 +108,54 @@ class RoomAPI {
   }
 
   void removeBulb(String roomId, Bulb bulb) {
-    
     print(bulb.id);
     _roomRef.child(roomId).child("bulb").child(bulb.id).remove();
   }
 
   void removeSensor(String roomId, Sensor sensor) {
     _roomRef.child(roomId).child("sensor").child(sensor.id).remove();
+  }
+
+  Future<Room> getRoom(String roomId) async {
+    Room room;
+    await _roomRef
+        .orderByChild("id")
+        .equalTo(roomId)
+        .once()
+        .then((DataSnapshot dataSnapshot) async {
+      if (dataSnapshot.value != null) {
+        room = Room.fromSnapshot(dataSnapshot.value.entries.elementAt(0).value);
+        String key = room.id;
+        try {
+          DataSnapshot bulbDataSnapshot =
+              await _roomRef.child("$key").child("bulb").once();
+          var bulbKeys = bulbDataSnapshot.value.keys;
+          var bulbValues = bulbDataSnapshot.value;
+          room.bulbs = [];
+          print(room.bulbs);
+          for (var key in bulbKeys) {
+            Bulb bulb = Bulb.fromSnapshot(bulbValues[key]);
+            if (bulb != null) {
+              room.bulbs.add(bulb);
+            }
+          }
+        } catch (e) {}
+
+        try {
+          DataSnapshot sensorDataSnapshot =
+              await _roomRef.child("$key").child("sensor").once();
+          var sensorKeys = sensorDataSnapshot.value.keys;
+          var sensorValues = sensorDataSnapshot.value;
+          room.sensors = [];
+          for (var key in sensorKeys) {
+            Sensor sensor = Sensor.fromSnapshot(sensorValues[key]);
+            if (sensor != null) {
+              room.sensors.add(sensor);
+            }
+          }
+        } catch (e) {}
+      }
+    });
+    return room;
   }
 }

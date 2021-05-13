@@ -18,7 +18,7 @@ class BulbManageDialog extends StatefulWidget {
 
 class _BulbManageDialogState extends State<BulbManageDialog> {
   int intensity = 255;
-  String topic = "datngotan2000/feeds/demo";
+  String topic = "datngotan2000/feeds/light-control.den-1";
   String deviceId;
   bool currentStatus = false;
   AppMqttTransactions myMqtt = AppMqttTransactions();
@@ -57,7 +57,7 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
           Slider(
             value: intensity.toDouble(),
             min: 0,
-            max: 255.0,
+            max: widget.bulb.intensity.toDouble(),
             onChanged: (double newValue) {
               setState(() {
                 intensity = newValue.round();
@@ -99,6 +99,8 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
             setState(() {
               Navigator.pop(context);
             });
+            // BlocProvider.of<RoomCubit>(context)
+            //       .updateBulb(widget.roomId, bulb);
           },
         ),
         FlatButton(
@@ -107,6 +109,7 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
             child: Text('UPDATE'),
             onPressed: () {
               publish(topic, intensity.toString());
+
             }),
       ],
     );

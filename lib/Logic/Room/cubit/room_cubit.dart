@@ -56,5 +56,11 @@ class RoomCubit extends Cubit<RoomState> {
     print("debug");
     emit(state);
   }
+  void getRoom(String roomId) async{
+    RoomState state = await roomRespository.getRoom(roomId);
+    print(state);
+    print("debug");
+    emit(state);
+  }
 
 }
