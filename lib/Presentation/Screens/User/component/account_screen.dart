@@ -42,7 +42,7 @@ class _AccountScreenState extends State<AccountScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: CustomAppBar("ACCOUNT", "INFOMATION"),
-          body: BlocBuilder<UserCubit, UserState>(
+      body: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           if (state is UserGetUserSuccess) {
             UserApp user = state.user;
@@ -83,11 +83,13 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             );
           } else {
-            return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
-            ),
-          );
+            return Background(
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
+              ),
+            );
           }
         },
       ),

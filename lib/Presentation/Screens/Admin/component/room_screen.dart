@@ -116,9 +116,11 @@ class _RoomScreenState extends State<RoomScreen> {
               },
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
+            return Background(
+                          child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
               ),
             );
           }

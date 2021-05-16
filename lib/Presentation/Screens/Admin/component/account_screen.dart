@@ -108,9 +108,11 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
+          return Background(
+                      child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.lightBlueAccent,
+              ),
             ),
           );
         }

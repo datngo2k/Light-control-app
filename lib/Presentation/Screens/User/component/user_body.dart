@@ -49,7 +49,7 @@ class _UserBodyState extends State<UserBody> {
     );
 
     return Scaffold(
-      body: _kTabPages[_currentTabIndex],
+      body: Background(child: _kTabPages[_currentTabIndex]),
       bottomNavigationBar: bottomNavBar
     );
   }

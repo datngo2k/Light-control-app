@@ -93,9 +93,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
+          return Background(
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.lightBlueAccent,
+              ),
             ),
           );
         }

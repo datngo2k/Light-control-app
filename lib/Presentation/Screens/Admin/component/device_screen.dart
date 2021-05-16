@@ -258,9 +258,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
               },
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
+            return Background(
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
               ),
             );
           }

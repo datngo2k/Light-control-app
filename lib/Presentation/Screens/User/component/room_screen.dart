@@ -75,7 +75,7 @@ class _RoomScreenState extends State<RoomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar("REGISTER", "ROOM"),
-          body: BlocListener<ScheduleCubit, ScheduleState>(
+      body: BlocListener<ScheduleCubit, ScheduleState>(
           listener: (context, state) {
         if (state is ScheduleAddScheduleSuccess) {
           final snackBar = SnackBar(content: Text("Đăng kí phòng thành công"));
@@ -88,7 +88,7 @@ class _RoomScreenState extends State<RoomScreen> {
         if (state is RoomGetAllSuccess) {
           List listItem = state.rooms.map((e) => e.id).toList();
           return Background(
-                    child: Column(
+            child: Column(
               children: [
                 Container(
                   child: CalendarCarousel<Event>(
@@ -177,8 +177,8 @@ class _RoomScreenState extends State<RoomScreen> {
                                 if (fromDate.isBefore(createDate) ||
                                     fromDate.isAfter(toDate)) {
                                   final snackBar = SnackBar(
-                                      content:
-                                          Text("Thời gian đăng kí không hợp lệ"));
+                                      content: Text(
+                                          "Thời gian đăng kí không hợp lệ"));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
                                 } else {
@@ -210,9 +210,11 @@ class _RoomScreenState extends State<RoomScreen> {
             ),
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
+          return Background(
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.lightBlueAccent,
+              ),
             ),
           );
         }

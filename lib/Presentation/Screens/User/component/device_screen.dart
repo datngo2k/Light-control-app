@@ -51,7 +51,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
                     tileColor: kBaseColor,
                   ),
                   SizedBox(height: 20),
-                  Text("Bulbs", style: kTextStyle,),
+                  Text(
+                    "Bulbs",
+                    style: kTextStyle,
+                  ),
                   Container(
                     child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -90,7 +93,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
                         }),
                   ),
                   SizedBox(height: 10),
-                  Text("Sensor", style: kTextStyle,),
+                  Text(
+                    "Sensor",
+                    style: kTextStyle,
+                  ),
                   SingleChildScrollView(
                     child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -139,9 +145,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
               )),
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
+            return Background(
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
               ),
             );
           }

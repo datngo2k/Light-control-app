@@ -14,7 +14,7 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-@override
+  @override
   void initState() {
     BlocProvider.of<ScheduleCubit>(context).getAllSchedules();
     super.initState();
@@ -24,12 +24,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar("HISTORY", "SYSTEM"),
-          body: Background(
-            child: BlocBuilder<ScheduleCubit, ScheduleState>(builder: (context, state) {
+      body: Background(
+        child: BlocBuilder<ScheduleCubit, ScheduleState>(
+            builder: (context, state) {
           if (state is ScheduleGetAllSuccess) {
             List<Schedule> schedules = state.schedules;
-            if(schedules.length == 0){
-              return Center(child: Text("Lịch sử trống", style: kTextStyle,),);
+            if (schedules.length == 0) {
+              return Center(
+                child: Text(
+                  "Lịch sử trống",
+                  style: kTextStyle,
+                ),
+              );
             }
             return ListView.builder(
               itemCount: schedules.length,
@@ -84,8 +90,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       icon: Icon(Icons.done_outline),
                                       onPressed: () {
                                         BlocProvider.of<ScheduleCubit>(context)
-                                            .acceptSchedule(
-                                                schedules[index]);
+                                            .acceptSchedule(schedules[index]);
                                       },
                                     ),
                                   ),
@@ -95,8 +100,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       icon: Icon(Icons.delete),
                                       onPressed: () {
                                         BlocProvider.of<ScheduleCubit>(context)
-                                            .acceptSchedule(
-                                                schedules[index]);
+                                            .acceptSchedule(schedules[index]);
                                       },
                                     ),
                                   ),
@@ -110,9 +114,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
               },
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.lightBlueAccent,
+            return Background(
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
               ),
             );
           }
