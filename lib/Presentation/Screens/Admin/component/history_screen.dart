@@ -90,7 +90,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       icon: Icon(Icons.done_outline),
                                       onPressed: () {
                                         BlocProvider.of<ScheduleCubit>(context)
-                                            .acceptSchedule(schedules[index]);
+                                            .unAcceptSchedule(schedules[index]);
                                       },
                                     ),
                                   ),
@@ -100,7 +100,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       icon: Icon(Icons.delete),
                                       onPressed: () {
                                         BlocProvider.of<ScheduleCubit>(context)
-                                            .acceptSchedule(schedules[index]);
+                                            .unAcceptSchedule(schedules[index]);
                                       },
                                     ),
                                   ),

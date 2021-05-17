@@ -26,10 +26,12 @@ class _LoginBodyState extends State<LoginBody> {
     return BlocListener<AuthCubit, AuthState>(
         listener: (context, state) async {
           if (state is AuthLoginFailed) {
-            final snackBar = SnackBar(content: Text(state.errorMessage));
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            final snackBar = SnackBar(content: Text(state.errorMessage), duration: Duration(milliseconds: 800));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else if (state is AuthLoginSuccess) {
-            final snackBar = SnackBar(content: Text("Đăng nhập thành công"));
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            final snackBar = SnackBar(content: Text("Đăng nhập thành công"), duration: Duration(milliseconds: 800),);
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
             if (isAdmin) {
               Navigator.of(context).pushNamed(
@@ -105,7 +107,7 @@ class _LoginBodyState extends State<LoginBody> {
                     password = _passwordController.text;
                     if (email == "" || password == "") {
                       final snackBar =
-                          SnackBar(content: Text("Vui lòng điền đầy đủ thông tin"));
+                          SnackBar(content: Text("Vui lòng điền đầy đủ thông tin"), duration: Duration(milliseconds: 800));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     } else {
                       if(isAdmin) {

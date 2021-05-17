@@ -2,28 +2,34 @@ import 'dart:convert';
 
 import 'package:light_controller_app/Data/Models/Device.dart';
 
-
-
-class Bulb extends Device{
+class Bulb extends Device {
   String id;
-  bool currentStatus;
+  int maxIntensity;
   int intensity;
+  String topic;
 
-  Bulb({this.id, this.intensity, this.currentStatus});
+  Bulb({
+    this.id,
+    this.maxIntensity,
+    this.intensity,
+    this.topic,
+  });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'currentStatus': currentStatus,
+      'maxIntensity': maxIntensity,
       'intensity': intensity,
+      'topic': topic
     };
   }
 
   factory Bulb.fromSnapshot(value) {
     return Bulb(
       id: value['id'],
-      currentStatus: value['currentStatus'],
+      maxIntensity: value['maxIntensity'],
       intensity: value['intensity'],
+      topic: value['topic']
     );
   }
 

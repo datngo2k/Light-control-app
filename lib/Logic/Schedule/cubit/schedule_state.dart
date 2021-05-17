@@ -50,3 +50,5 @@ class ScheduleGetAllFailed extends ScheduleState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+class ScheduleLoading extends ScheduleState {}

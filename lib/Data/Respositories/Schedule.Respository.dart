@@ -6,10 +6,9 @@ import 'package:light_controller_app/Logic/Schedule/cubit/schedule_cubit.dart';
 class ScheduleRespository {
   static ScheduleAPI scheduleAPI = ScheduleAPI();
 
-  ScheduleState addNewSchedule(Schedule schedule) {
+  Future<ScheduleState> addNewSchedule(Schedule schedule) async {
     try {
-      scheduleAPI.addNewSchedule(schedule);
-      return ScheduleAddScheduleSuccess(message: schedule.roomId);
+      return await scheduleAPI.addNewSchedule(schedule);
     } catch (e) {
       return ScheduleAddScheduleFailed(errorMessage: e.toString());
     }

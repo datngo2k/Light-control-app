@@ -67,6 +67,7 @@ class AppMqttTransactions {
     }
     return true;
   }
+
   Future<bool> unSubscribe(String topic) async {
     return true;
   }
@@ -188,6 +189,7 @@ class AppMqttTransactions {
     }
     log.info('Subscribing to the topic $topic');
     client.subscribe(topic, MqttQos.atMostOnce);
+
 
     /// The client has a change notifier object(see the Observable class) which we then listen to to get
     /// notifications of published updates to each subscribed topic.

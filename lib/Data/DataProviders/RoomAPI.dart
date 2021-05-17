@@ -65,6 +65,7 @@ class RoomAPI {
   }
 
   void addNewBulb(String roomId, Bulb bulb) {
+    print("dat ${bulb.topic}");
     _roomRef.child(roomId).child("bulb").child(bulb.id).set(bulb.toJson());
   }
 

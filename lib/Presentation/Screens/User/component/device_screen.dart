@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:light_controller_app/Data/Models/Bulb.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 import 'package:light_controller_app/Presentation/Component/CustomAppBar.dart';
+import 'package:light_controller_app/Presentation/Screens/User/Utils/mqtt_stream.dart';
 import 'package:light_controller_app/Presentation/Screens/User/component/manage_bulb.dart';
 import 'package:light_controller_app/Presentation/Screens/User/component/background.dart';
 import 'package:light_controller_app/Presentation/components/rounded_button.dart';
@@ -34,6 +35,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
         });
   }
 
+  AppMqttTransactions myMqtt = AppMqttTransactions();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,9 +140,28 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   SizedBox(height: 30),
                   RoundedButton(press: () {}, text: "Auto change brightness"),
                   SizedBox(height: 10),
-                  RoundedButton(press: () {}, text: "Turn on all the lights"),
+                  RoundedButton(text: "Turn on all the lights", press: () async {
+                    for (Bulb bulb in state.room.bulbs) {
+                        await myMqtt.subscribe(bulb.topic);
+                        await myMqtt.publish(bulb.topic, "${bulb.maxIntensity}");
+                        bulb.intensity = bulb.maxIntensity;
+                        BlocProvider.of<RoomCubit>(context)
+                            .updateIntensityBulb("H2-105", bulb);
+                      }
+                  }),
                   SizedBox(height: 10),
-                  RoundedButton(press: () {}, text: "Turn off all the lights")
+                  RoundedButton(
+                    text: "Turn off all the lights",
+                    press: () async {
+                      for (Bulb bulb in state.room.bulbs) {
+                        await myMqtt.subscribe(bulb.topic);
+                        await myMqtt.publish(bulb.topic, "0");
+                        bulb.intensity = 0;
+                        BlocProvider.of<RoomCubit>(context)
+                            .updateIntensityBulb("H2-105", bulb);
+                      }
+                    },
+                  )
                 ]),
               )),
             );

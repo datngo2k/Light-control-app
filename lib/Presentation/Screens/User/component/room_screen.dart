@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 import 'package:light_controller_app/Logic/Schedule/cubit/schedule_cubit.dart';
@@ -78,10 +79,16 @@ class _RoomScreenState extends State<RoomScreen> {
       body: BlocListener<ScheduleCubit, ScheduleState>(
           listener: (context, state) {
         if (state is ScheduleAddScheduleSuccess) {
-          final snackBar = SnackBar(content: Text("Đăng kí phòng thành công"));
+          EasyLoading.dismiss();
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          final snackBar = SnackBar(content: Text("Đăng kí phòng thành công"), duration: Duration(milliseconds: 800),);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        } else {
-          final snackBar = SnackBar(content: Text("Đăng kí phòng thất bại"));
+        } else if (state is ScheduleLoading) {
+          EasyLoading.show(status: 'loading...');
+        } else if(state is ScheduleAddScheduleFailed){
+          EasyLoading.dismiss();
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          final snackBar = SnackBar(content: Text("${state.errorMessage}"), duration: Duration(milliseconds: 800),);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       }, child: BlocBuilder<RoomCubit, RoomState>(builder: (context, state) {

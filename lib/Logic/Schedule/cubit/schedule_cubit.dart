@@ -9,8 +9,9 @@ class ScheduleCubit extends Cubit<ScheduleState> {
   ScheduleRespository scheduleRespository = ScheduleRespository();
   ScheduleCubit() : super(ScheduleInitial());
 
-  void addSchedule(Schedule schedule) {
-    ScheduleState state = scheduleRespository.addNewSchedule(schedule);
+  Future<void> addSchedule(Schedule schedule) async {
+    emit(ScheduleLoading());
+    ScheduleState state = await scheduleRespository.addNewSchedule(schedule);
     emit(state);
   }
 
@@ -31,7 +32,15 @@ class ScheduleCubit extends Cubit<ScheduleState> {
   }
 
 
-    void acceptSchedule(Schedule schedule) async{
+  void acceptSchedule(Schedule schedule) async{
+    if(schedule.state == 0){
+      schedule.state = 1;
+    }
+    else schedule.state = 0;
+    scheduleRespository.acceptSchedule(schedule);
+    getAllPendingSchedules();
+  }
+  void unAcceptSchedule(Schedule schedule) async{
     if(schedule.state == 0){
       schedule.state = 1;
     }

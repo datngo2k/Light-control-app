@@ -16,15 +16,20 @@ class BulbInfoDialog extends StatefulWidget {
 
 class _BulbInfoDialogState extends State<BulbInfoDialog> {
   final TextEditingController _deviceIdController = TextEditingController();
-  int intensity = 255;
+  int intensity;
+  int maxIntensity;
   String deviceId;
+  String topic;
   bool currentStatus = false;
-
+  final TextEditingController _topicController = TextEditingController();
   @override
   void initState() {
     intensity = widget.bulb.intensity;
     deviceId = widget.bulb.id;
-    currentStatus = widget.bulb.currentStatus;
+    currentStatus = widget.bulb.intensity != 0;
+    maxIntensity = widget.bulb.maxIntensity;
+    topic = widget.bulb.topic;
+    _topicController.text = topic;
     super.initState();
   }
 
@@ -57,21 +62,35 @@ class _BulbInfoDialogState extends State<BulbInfoDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Device Id:   $deviceId", style: kTextStyle),
+          SizedBox(height: 10),
+          Text("Topic: ", style: kTextStyle),
+          TextField(
+            onChanged: (value) {
+              setState(() {
+                deviceId = value;
+              });
+            },
+            controller: _topicController,
+            decoration: InputDecoration(hintText: "Topic"),
+          ),
           Column(
             children: [
               SizedBox(
                 height: 10.0,
               ),
-              Text("Max intensity: $intensity", style: kTextStyle),
+              Text("Max intensity: $maxIntensity", style: kTextStyle),
               Slider(
-                value: intensity.toDouble(),
+                value: maxIntensity.toDouble(),
                 min: 0,
                 max: 255.0,
                 onChanged: (double newValue) {
                   setState(() {
-                    intensity = newValue.round();
+                    maxIntensity = newValue.round();
                   });
                 },
+              ),
+              SizedBox(
+                height: 10.0,
               ),
               currentStatus
                   ? Text(
@@ -98,17 +117,23 @@ class _BulbInfoDialogState extends State<BulbInfoDialog> {
           },
         ),
         FlatButton(
-          color: Colors.green,
-          textColor: Colors.white,
-          child: Text('UPDATE'),
-          onPressed: () {
-
-              Bulb bulb = Bulb(
-                  id: deviceId, intensity: intensity, currentStatus: currentStatus);
-              BlocProvider.of<RoomCubit>(context)
-                  .updateBulb(widget.roomId, bulb);
-              Navigator.pop(context);
-          })
+            color: Colors.green,
+            textColor: Colors.white,
+            child: Text('UPDATE'),
+            onPressed: () {
+              if (_topicController.text != "") {
+                final snackBar = SnackBar(
+                  content: Text("Vui lòng điền topic"),
+                  duration: Duration(milliseconds: 800),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else {
+                Bulb bulb = Bulb(id: deviceId, maxIntensity: maxIntensity,);
+                BlocProvider.of<RoomCubit>(context)
+                    .updateBulb(widget.roomId, bulb);
+                Navigator.pop(context);
+              }
+            })
       ],
     );
   }

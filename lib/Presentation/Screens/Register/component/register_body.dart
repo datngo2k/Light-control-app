@@ -21,11 +21,11 @@ class RegisterBody extends StatelessWidget {
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if(state is RegisterFailed){
-          final snackBar = SnackBar(content: Text(state.errorMessage));
+          final snackBar = SnackBar(content: Text(state.errorMessage), duration: Duration(milliseconds: 800));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
         else {
-          final snackBar = SnackBar(content: Text("Đăng kí tài khoản thành công"));
+          final snackBar = SnackBar(content: Text("Đăng kí tài khoản thành công"), duration: Duration(milliseconds: 800));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
           Navigator.pop(context);
         }

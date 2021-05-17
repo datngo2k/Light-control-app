@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:light_controller_app/Logic/Auth/cubit/auth_cubit.dart';
 import 'package:light_controller_app/Logic/Internet/internet_cubit.dart';
 import 'package:light_controller_app/Logic/Register/cubit/register_cubit.dart';
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: kBackgroundColor
         ),
         onGenerateRoute: appRouter.onGenerateRoute,
+        builder: EasyLoading.init(),
       ),
     );
   }

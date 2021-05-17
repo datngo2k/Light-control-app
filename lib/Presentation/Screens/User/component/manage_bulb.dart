@@ -18,15 +18,20 @@ class BulbManageDialog extends StatefulWidget {
 
 class _BulbManageDialogState extends State<BulbManageDialog> {
   int intensity = 255;
-  String topic = "datngotan2000/feeds/light-control.den-1";
+  // List<String> topic = [
+  //   "datngotan2000/feeds/light-control.den-1",
+  //   "datngotan2000/feeds/light-control.den-2"
+  // ];
   String deviceId;
-  bool currentStatus = false;
+  int maxIntensity;
+  String topic;
   AppMqttTransactions myMqtt = AppMqttTransactions();
   @override
   void initState() {
     intensity = widget.bulb.intensity;
     deviceId = widget.bulb.id;
-    currentStatus = widget.bulb.currentStatus;
+    maxIntensity = widget.bulb.maxIntensity;
+    topic = widget.bulb.topic;
     subscribe(topic);
     super.initState();
   }
@@ -53,11 +58,22 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
           SizedBox(
             height: 10.0,
           ),
-          Text("Intensity: $intensity", style: kTextStyle),
+          StreamBuilder(
+              stream: AdafruitFeed.sensorStream,
+              builder: (context, snapshot) {
+                print("hello");
+                if (!snapshot.hasData) {
+                  String reading = snapshot.data;
+                  if (reading != null) {
+                    intensity = int.parse(reading);
+                  }
+                }
+                return Text("Intensity: $intensity", style: kTextStyle);
+              }),
           Slider(
             value: intensity.toDouble(),
             min: 0,
-            max: widget.bulb.intensity.toDouble(),
+            max: widget.bulb.maxIntensity.toDouble(),
             onChanged: (double newValue) {
               setState(() {
                 intensity = newValue.round();
@@ -71,23 +87,19 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
             activeColor: kButtonColor,
             onToggle: (val) {
               setState(() {
-                currentStatus = val;
+                if (intensity != 0) {
+                  intensity = 0;
+                } else {
+                  intensity = maxIntensity;
+                }
+                publish(topic, intensity.toString());
+                widget.bulb.intensity = intensity;
+                BlocProvider.of<RoomCubit>(context)
+                    .updateIntensityBulb(widget.roomId, widget.bulb);
               });
             },
-            value: currentStatus,
+            value: intensity != 0,
           ),
-          StreamBuilder(
-              stream: AdafruitFeed.sensorStream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return CircularProgressIndicator();
-                }
-                String reading = snapshot.data;
-                if (reading == null) {
-                  reading = 'no value is available';
-                }
-                return Text(reading);
-              })
         ],
       ),
       actions: <Widget>[
@@ -109,7 +121,9 @@ class _BulbManageDialogState extends State<BulbManageDialog> {
             child: Text('UPDATE'),
             onPressed: () {
               publish(topic, intensity.toString());
-
+              widget.bulb.intensity = intensity;
+              BlocProvider.of<RoomCubit>(context)
+                  .updateIntensityBulb(widget.roomId, widget.bulb);
             }),
       ],
     );
