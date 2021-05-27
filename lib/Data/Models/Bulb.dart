@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:light_controller_app/Data/Models/Device.dart';
+import 'package:light_controller_app/constant/constant.dart';
 
 class Bulb extends Device {
   String id;
@@ -36,5 +38,12 @@ class Bulb extends Device {
   @override
   String getInfo() {
     return "$id";
+  }
+
+  Text getState() {
+    if(intensity > 0){
+      return Text("ON", style: kTextOnStyle);
+    }
+    else return Text("OFF", style: kTextOffStyle);
   }
 }

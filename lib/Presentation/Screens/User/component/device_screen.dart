@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:light_controller_app/Data/Models/Bulb.dart';
+import 'package:light_controller_app/Data/Models/Sensor.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 import 'package:light_controller_app/Presentation/Component/CustomAppBar.dart';
+import 'package:light_controller_app/Presentation/Screens/User/Utils/Adafruit_feed.dart';
 import 'package:light_controller_app/Presentation/Screens/User/Utils/mqtt_stream.dart';
 import 'package:light_controller_app/Presentation/Screens/User/component/manage_bulb.dart';
 import 'package:light_controller_app/Presentation/Screens/User/component/background.dart';
@@ -24,18 +28,20 @@ class _DeviceScreenState extends State<DeviceScreen> {
   }
 
   Future<void> _bulbInfoDialog(
-      BuildContext context, Bulb bulb, String roomId) async {
+      BuildContext context, Bulb bulb, String roomId, AppMqttTransactions sensorMqtt) async {
     return showDialog(
         context: context,
         builder: (_) {
           return BulbManageDialog(
             bulb: bulb,
             roomId: roomId,
+            myMqtt: sensorMqtt
           );
         });
   }
 
-  AppMqttTransactions myMqtt = AppMqttTransactions();
+  AppMqttTransactions lightMqtt = AppMqttTransactions();
+  AppMqttTransactions sensorMqtt = AppMqttTransactions();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +66,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   Container(
                     child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 90,
+                            maxCrossAxisExtent: 125,
                             childAspectRatio: 1,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10),
@@ -70,26 +76,32 @@ class _DeviceScreenState extends State<DeviceScreen> {
                           return GestureDetector(
                             onTap: () {
                               _bulbInfoDialog(context,
-                                  state.room.bulbs[deviceIndex], state.room.id);
+                                  state.room.bulbs[deviceIndex], state.room.id, lightMqtt);
                             },
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Column(children: [
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Image.asset(
-                                  "asset/img/light.png",
-                                  height: 40,
-                                ),
-                                Text(
-                                  "${state.room.bulbs[deviceIndex].getInfo()}",
-                                  style: kTitleDeviceStyle,
-                                ),
-                              ]),
-                              decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  borderRadius: BorderRadius.circular(15)),
+                            child: StreamBuilder(
+                              stream: null,
+                              builder: (context, snapshot) {
+                                return Container(
+                                  alignment: Alignment.center,
+                                  child: Column(children: [
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Image.asset(
+                                      "asset/img/light.png",
+                                      height: 40,
+                                    ),
+                                    Text(
+                                      "${state.room.bulbs[deviceIndex].getInfo()}",
+                                      style: kTitleDeviceStyle,
+                                    ),
+                                    state.room.bulbs[deviceIndex].getState(),
+                                  ]),
+                                  decoration: BoxDecoration(
+                                      color: Colors.amber,
+                                      borderRadius: BorderRadius.circular(15)),
+                                );
+                              }
                             ),
                           );
                         }),
@@ -102,37 +114,54 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   SingleChildScrollView(
                     child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 90,
+                            maxCrossAxisExtent: 125,
                             childAspectRatio: 1,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10),
                         itemCount: state.room.sensors.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext ctx, deviceIndex) {
+                          sensorMqtt.subscribe(state.room.sensors[deviceIndex].topic);
                           return GestureDetector(
                             onTap: () {
                               // _sensorInfoDialog(
                               //     context,
-                              //     rooms[roomIndex]
+                              //     state.room
                               //         .sensors[deviceIndex],
-                              //     rooms[roomIndex].id);
+                              //     state.room.id);
                             },
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Column(children: [
-                                SizedBox(height: 20),
-                                SvgPicture.asset(
-                                  "asset/img/sensor.svg",
-                                  height: 30,
-                                ),
-                                SizedBox(height: 7),
-                                Text(
-                                    "${state.room.sensors[deviceIndex].getInfo()}",
-                                    style: kTitleDeviceStyle),
-                              ]),
-                              decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  borderRadius: BorderRadius.circular(15)),
+                            child: StreamBuilder<Object>(
+                              stream: sensorMqtt.adafruitFeed.sensorStream,
+                              builder: (context, snapshot) {
+                                String currentStatus = "null";
+                                if (snapshot.hasData) {
+                                  dynamic reading = jsonDecode(snapshot.data);
+                                  print(reading);
+                                  if (reading != null) {
+                                    currentStatus= reading["data"];
+                                  }
+                                }
+                                return Container(
+                                  alignment: Alignment.center,
+                                  child: Column(children: [
+                                    SizedBox(height: 20),
+                                    SvgPicture.asset(
+                                      "asset/img/sensor.svg",
+                                      height: 30,
+                                    ),
+                                    SizedBox(height: 7),
+                                    Text(
+                                        "${state.room.sensors[deviceIndex].getInfo()}",
+                                        style: kTitleDeviceStyle),
+                                    Text(
+                                        "Data: $currentStatus",
+                                        style: kTitleDeviceStyle),
+                                  ]),
+                                  decoration: BoxDecoration(
+                                      color: Colors.amber,
+                                      borderRadius: BorderRadius.circular(15)),
+                                );
+                              }
                             ),
                           );
                         }),
@@ -142,24 +171,31 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   SizedBox(height: 10),
                   RoundedButton(text: "Turn on all the lights", press: () async {
                     for (Bulb bulb in state.room.bulbs) {
-                        await myMqtt.subscribe(bulb.topic);
-                        await myMqtt.publish(bulb.topic, "${bulb.maxIntensity}");
                         bulb.intensity = bulb.maxIntensity;
                         BlocProvider.of<RoomCubit>(context)
                             .updateIntensityBulb("H2-105", bulb);
+                        await lightMqtt.subscribe(bulb.topic);
+                        await lightMqtt.publish(bulb.topic, "${bulb.maxIntensity}");
+                        
                       }
+                      BlocProvider.of<RoomCubit>(context)
+                            .getRoom("H2-105");
                   }),
                   SizedBox(height: 10),
                   RoundedButton(
                     text: "Turn off all the lights",
                     press: () async {
                       for (Bulb bulb in state.room.bulbs) {
-                        await myMqtt.subscribe(bulb.topic);
-                        await myMqtt.publish(bulb.topic, "0");
                         bulb.intensity = 0;
                         BlocProvider.of<RoomCubit>(context)
                             .updateIntensityBulb("H2-105", bulb);
+                        await lightMqtt.subscribe(bulb.topic);
+                        await lightMqtt.publish(bulb.topic, "0");
+                        
+                        
                       }
+                      BlocProvider.of<RoomCubit>(context)
+                            .getRoom("H2-105");
                     },
                   )
                 ]),

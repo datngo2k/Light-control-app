@@ -28,6 +28,7 @@ import 'Adafruit_feed.dart';
 
 class AppMqttTransactions {
   Logger log;
+  AdafruitFeed adafruitFeed = AdafruitFeed();
 // Constructor
   AppMqttTransactions() {
     // Start logger.  MAKE SURE STRING IS NAME OF DART FILE WHERE
@@ -199,7 +200,7 @@ class AppMqttTransactions {
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
       /// The payload is a byte buffer, this will be specific to the topic
-      AdafruitFeed.add(pt);
+      adafruitFeed.add(pt);
       log.info(
           'Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
       return pt;

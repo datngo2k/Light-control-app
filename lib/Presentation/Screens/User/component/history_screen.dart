@@ -39,6 +39,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
           BlocBuilder<ScheduleCubit, ScheduleState>(builder: (context, state) {
         if (state is ScheduleGetAllSuccess) {
           List<Schedule> schedules = state.schedules;
+          if(schedules.length == 0){
+            return Background(child: Center(child: Text("Empty", style: kTextStyle,)));
+          }
           return Background(
             child: ListView.builder(
               itemCount: schedules.length,

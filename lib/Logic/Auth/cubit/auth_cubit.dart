@@ -17,7 +17,6 @@ class AuthCubit extends Cubit<AuthState> {
       AuthState state =  userRespository.signIn(email, password);
       emit(state);
     }
-    
   }
   void signInAdmin(String email, String password) async {
     bool isExist = await userRespository.isExistAdmin(email);
@@ -28,7 +27,6 @@ class AuthCubit extends Cubit<AuthState> {
       AuthState state =  userRespository.signIn(email, password);
       emit(state);
     }
-    
   }
   void signOut(){
     userRespository.signOut();

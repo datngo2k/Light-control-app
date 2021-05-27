@@ -2,20 +2,13 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 
 class AdafruitFeed {
-  //
-  // Both the StreamController and Stream are defined as static.  This
-  // means they both belong to the class and not to an instance.
-  // It was my way of getting to what I was used to via Singleton
-  // functionality in some other languages.
-  //
-  // A Stream controller alerts the stream when new data is available.
-  // The controller should be private.
-  static var _feedController = StreamController<String>.broadcast();
+
+  var _feedController = StreamController<String>.broadcast();
   // Expose the stream so a StreamBuilder and use it.
-  static Stream<String> get sensorStream => _feedController.stream;
+  Stream<String> get sensorStream => _feedController.stream;
 //
 // TODO: add takes in a string, but forces the feed to be an int
-  static void add(String value) {
+  void add(String value) {
     Logger log = Logger('Adafruit_feed.dart');
     try {
       _feedController.add(value);
@@ -26,7 +19,7 @@ class AdafruitFeed {
     }
   }
 
-  static void dispose(){
+  void dispose(){
     _feedController.close();
   }
 }

@@ -179,6 +179,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                             child: Container(
                                               alignment: Alignment.center,
                                               child: Column(children: [
+                                                SizedBox(height: 10),
                                                 Image.asset(
                                                   "asset/img/light.png",
                                                   height: 40,
@@ -221,12 +222,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                             child: Container(
                                               alignment: Alignment.center,
                                               child: Column(children: [
-                                                SizedBox(height: 5),
+                                                SizedBox(height: 10),
                                                 SvgPicture.asset(
                                                   "asset/img/sensor.svg",
                                                   height: 30,
                                                 ),
-                                                SizedBox(height: 7),
                                                 Text(
                                                     "${rooms[roomIndex].sensors[deviceIndex].getInfo()}",
                                                     style: kTitleDeviceStyle),

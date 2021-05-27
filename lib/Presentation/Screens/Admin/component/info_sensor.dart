@@ -17,6 +17,7 @@ class SensorInfoDialog extends StatefulWidget {
 
 class _SensorInfoDialogState extends State<SensorInfoDialog> {
   final TextEditingController _deviceIdController = TextEditingController();
+  final TextEditingController _topicIdController = TextEditingController();
   String deviceId;
   String currentStatus;
 
@@ -25,6 +26,7 @@ class _SensorInfoDialogState extends State<SensorInfoDialog> {
     deviceId = widget.sensor.id;
     currentStatus = widget.sensor.currentValue;
     _deviceIdController.text = currentStatus;
+    _topicIdController.text = widget.sensor.topic;
     super.initState();
   }
 
@@ -57,13 +59,23 @@ class _SensorInfoDialogState extends State<SensorInfoDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Device Id:   $deviceId", style: kTextStyle),
+          SizedBox(height: 10),
+          Text("Topic: ", style: kTextStyle),
+          // TextField(
+          //   onChanged: (value) {
+          //     setState(() {
+          //       currentStatus = value;
+          //     });
+          //   },
+          //   controller: _deviceIdController,
+          //   decoration: InputDecoration(hintText: "Device id"),
+          // ),
           TextField(
             onChanged: (value) {
               setState(() {
-                currentStatus = value;
               });
             },
-            controller: _deviceIdController,
+            controller: _topicIdController,
             decoration: InputDecoration(hintText: "Device id"),
           ),
         ],
@@ -85,15 +97,16 @@ class _SensorInfoDialogState extends State<SensorInfoDialog> {
           child: Text('UPDATE'),
           onPressed: () {
             setState(() {
-              if (_deviceIdController.text != "") {
+              if (_topicIdController.text != "") {
                 currentStatus = _deviceIdController.text;
-                Sensor sensor = Sensor(id: deviceId, currentValue: currentStatus);
+                Sensor sensor = widget.sensor;
+                sensor.topic = _topicIdController.text;
                 BlocProvider.of<RoomCubit>(context)
                     .updateSensor(widget.roomId, sensor);
                 Navigator.pop(context);
               } else {
                 final snackBar =
-                    SnackBar(content: Text("Vui lòng điền trang thai"));
+                    SnackBar(content: Text("Vui lòng điền thông tin topic"));
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             });

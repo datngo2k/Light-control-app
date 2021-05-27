@@ -67,7 +67,7 @@ class _BulbInfoDialogState extends State<BulbInfoDialog> {
           TextField(
             onChanged: (value) {
               setState(() {
-                deviceId = value;
+                topic = value;
               });
             },
             controller: _topicController,
@@ -121,14 +121,16 @@ class _BulbInfoDialogState extends State<BulbInfoDialog> {
             textColor: Colors.white,
             child: Text('UPDATE'),
             onPressed: () {
-              if (_topicController.text != "") {
+              if (_topicController.text == "") {
                 final snackBar = SnackBar(
                   content: Text("Vui lòng điền topic"),
                   duration: Duration(milliseconds: 800),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               } else {
-                Bulb bulb = Bulb(id: deviceId, maxIntensity: maxIntensity,);
+                Bulb bulb = widget.bulb;
+                bulb.topic = _topicController.text;
+                bulb.maxIntensity = maxIntensity;
                 BlocProvider.of<RoomCubit>(context)
                     .updateBulb(widget.roomId, bulb);
                 Navigator.pop(context);
