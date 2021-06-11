@@ -116,8 +116,7 @@ class _AddNewDeviceDialogState extends State<AddNewDeviceDialog> {
                 if (deviceType == "Bulb") {
                   Bulb bulb = Bulb(
                       id: deviceId,
-                      intensity: intensity,
-                      maxIntensity: maxIntensity,
+                      status: 0,
                       topic: topic);
                   
                   BlocProvider.of<RoomCubit>(context)
@@ -125,7 +124,7 @@ class _AddNewDeviceDialogState extends State<AddNewDeviceDialog> {
                 } else {
                   Sensor sensor = Sensor(
                       id: deviceId,
-                      currentValue: "Default",
+                      data: 0,
                       topic: topic);
                   BlocProvider.of<RoomCubit>(context)
                       .addNewSensor(widget.roomId, sensor);

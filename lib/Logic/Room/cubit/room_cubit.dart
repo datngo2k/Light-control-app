@@ -41,7 +41,6 @@ class RoomCubit extends Cubit<RoomState> {
   void updateSensor(String roomId, Sensor sensor) {
     RoomState state = roomRespository.updateSensor(roomId, sensor);
     print(state);
-    getAllRooms();
   }
   void removeBulb(String roomId, Bulb bulb) {
     RoomState state = roomRespository.removeBulb(roomId, bulb);

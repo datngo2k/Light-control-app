@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:light_controller_app/Logic/Auth/cubit/auth_cubit.dart';
 import 'package:light_controller_app/Logic/Internet/internet_cubit.dart';
+import 'package:light_controller_app/Logic/LightControl/cubit/lightcontrol_cubit.dart';
 import 'package:light_controller_app/Logic/Register/cubit/register_cubit.dart';
 import 'package:light_controller_app/Logic/User/cubit/user_cubit.dart';
 import 'package:light_controller_app/Presentation/Routes/app-router.dart';
-import 'package:light_controller_app/Presentation/Screens/Login/login_screen.dart';
 import 'package:light_controller_app/constant/constant.dart';
 import 'package:logging/logging.dart';
 import 'package:stack_trace/stack_trace.dart';
@@ -68,6 +68,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ScheduleCubit>(
           create: (context) => ScheduleCubit(),
+        ),
+        BlocProvider<LightcontrolCubit>(
+          create: (context) => LightcontrolCubit(),
         ),
       ],
       child: MaterialApp(

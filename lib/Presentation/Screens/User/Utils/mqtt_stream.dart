@@ -146,12 +146,12 @@ class AppMqttTransactions {
     final MqttConnectMessage connMess = MqttConnectMessage()
         .authenticateAs(connectJson['username'], connectJson['key'])
         .withClientIdentifier('myClientID')
-        .keepAliveFor(60) // Must agree with the keep alive set above or not set
+        .keepAliveFor(120) // Must agree with the keep alive set above or not set
         .withWillTopic(
             'willtopic') // If you set this you must set a will message
         .withWillMessage('My Will message')
         .startClean() // Non persistent session for testing
-        .withWillQos(MqttQos.atMostOnce);
+        .withWillQos(MqttQos.atLeastOnce);
     log.info('Adafruit client connecting....');
     client.connectionMessage = connMess;
 
@@ -172,8 +172,8 @@ class AppMqttTransactions {
       log.info('Adafruit client connected');
     } else {
       /// Use status here rather than state if you also want the broker return code.
-      log.info(
-          'Adafruit client connection failed - disconnecting, status is ${client.connectionStatus}');
+      // log.info(
+      //     'Adafruit client connection failed - disconnecting, status is ${client.connectionStatus}');
       client.disconnect();
       client = null;
     }

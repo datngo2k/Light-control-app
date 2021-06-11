@@ -19,13 +19,12 @@ class _SensorInfoDialogState extends State<SensorInfoDialog> {
   final TextEditingController _deviceIdController = TextEditingController();
   final TextEditingController _topicIdController = TextEditingController();
   String deviceId;
-  String currentStatus;
+  int data;
 
   @override
   void initState() {
     deviceId = widget.sensor.id;
-    currentStatus = widget.sensor.currentValue;
-    _deviceIdController.text = currentStatus;
+    data = widget.sensor.data;
     _topicIdController.text = widget.sensor.topic;
     super.initState();
   }
@@ -59,6 +58,8 @@ class _SensorInfoDialogState extends State<SensorInfoDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Device Id:   $deviceId", style: kTextStyle),
+          SizedBox(height: 10),
+          Text("Data:   $data", style: kTextStyle),
           SizedBox(height: 10),
           Text("Topic: ", style: kTextStyle),
           // TextField(
@@ -98,7 +99,6 @@ class _SensorInfoDialogState extends State<SensorInfoDialog> {
           onPressed: () {
             setState(() {
               if (_topicIdController.text != "") {
-                currentStatus = _deviceIdController.text;
                 Sensor sensor = widget.sensor;
                 sensor.topic = _topicIdController.text;
                 BlocProvider.of<RoomCubit>(context)

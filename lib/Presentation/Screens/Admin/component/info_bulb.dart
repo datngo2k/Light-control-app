@@ -15,19 +15,15 @@ class BulbInfoDialog extends StatefulWidget {
 }
 
 class _BulbInfoDialogState extends State<BulbInfoDialog> {
-  final TextEditingController _deviceIdController = TextEditingController();
-  int intensity;
-  int maxIntensity;
+  // final TextEditingController _deviceIdController = TextEditingController();
+  Text status;
   String deviceId;
   String topic;
-  bool currentStatus = false;
   final TextEditingController _topicController = TextEditingController();
   @override
   void initState() {
-    intensity = widget.bulb.intensity;
     deviceId = widget.bulb.id;
-    currentStatus = widget.bulb.intensity != 0;
-    maxIntensity = widget.bulb.maxIntensity;
+    status = widget.bulb.getState();
     topic = widget.bulb.topic;
     _topicController.text = topic;
     super.initState();
@@ -78,29 +74,19 @@ class _BulbInfoDialogState extends State<BulbInfoDialog> {
               SizedBox(
                 height: 10.0,
               ),
-              Text("Max intensity: $maxIntensity", style: kTextStyle),
-              Slider(
-                value: maxIntensity.toDouble(),
-                min: 0,
-                max: 255.0,
-                onChanged: (double newValue) {
-                  setState(() {
-                    maxIntensity = newValue.round();
-                  });
-                },
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              currentStatus
-                  ? Text(
-                      "Status: On",
-                      style: kTextOnStyle,
-                    )
-                  : Text(
-                      "Status: Off",
-                      style: kTextOffStyle,
-                    ),
+              // Text("Status: $status", style: kTextStyle),
+              // SizedBox(
+              //   height: 10.0,
+              // ),
+              status
+                  // ? Text(
+                  //     "Status: On",
+                  //     style: kTextOnStyle,
+                  //   )
+                  // : Text(
+                  //     "Status: Off",
+                  //     style: kTextOffStyle,
+                  //   ),
             ],
           ),
         ],
@@ -130,7 +116,6 @@ class _BulbInfoDialogState extends State<BulbInfoDialog> {
               } else {
                 Bulb bulb = widget.bulb;
                 bulb.topic = _topicController.text;
-                bulb.maxIntensity = maxIntensity;
                 BlocProvider.of<RoomCubit>(context)
                     .updateBulb(widget.roomId, bulb);
                 Navigator.pop(context);

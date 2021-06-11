@@ -7,17 +7,17 @@ import 'package:light_controller_app/Data/Models/Device.dart';
 
 class Sensor extends Device{
   String id;
-  String currentValue;
+  int data;
   String topic;
   // List<SensorHistory> sensorHistory;
 
-  Sensor({@required this.id, this.currentValue, this.topic});
+  Sensor({@required this.id, this.data, this.topic});
 
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'currentValue': currentValue,
+      'data': data,
       'topic': topic
       // 'sensorHistory': sensorHistory?.map((x) => x.toMap())?.toList(),
     };
@@ -26,7 +26,7 @@ class Sensor extends Device{
   factory Sensor.fromSnapshot(value) {
     return Sensor(
       id: value['id'],
-      currentValue: value['currentValue'],
+      data: value['data'],
       topic: value['topic']
       // sensorHistory: List<SensorHistory>.from(map['sensorHistory']?.map((x) => SensorHistory.fromMap(x))),
     );

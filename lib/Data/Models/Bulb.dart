@@ -6,22 +6,19 @@ import 'package:light_controller_app/constant/constant.dart';
 
 class Bulb extends Device {
   String id;
-  int maxIntensity;
-  int intensity;
+  int status;
   String topic;
 
   Bulb({
     this.id,
-    this.maxIntensity,
-    this.intensity,
+    this.status,
     this.topic,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'maxIntensity': maxIntensity,
-      'intensity': intensity,
+      'status': status,
       'topic': topic
     };
   }
@@ -29,8 +26,7 @@ class Bulb extends Device {
   factory Bulb.fromSnapshot(value) {
     return Bulb(
       id: value['id'],
-      maxIntensity: value['maxIntensity'],
-      intensity: value['intensity'],
+      status: value['status'],
       topic: value['topic']
     );
   }
@@ -41,9 +37,19 @@ class Bulb extends Device {
   }
 
   Text getState() {
-    if(intensity > 0){
+    if(status == 1){
       return Text("ON", style: kTextOnStyle);
     }
     else return Text("OFF", style: kTextOffStyle);
+  }
+  int toggle() {
+    if(status == 0){
+      status = 1;
+      return 1;
+    }
+    else{
+      status = 0;
+      return 0;
+    } 
   }
 }
