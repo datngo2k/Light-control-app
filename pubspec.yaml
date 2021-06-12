@@ -45,6 +45,7 @@ dependencies:
   mqtt_client: ^5.4.0
   logging: ^0.11.3+2
   stack_trace: ^1.9.3
+  flutter_countdown_timer: ^4.1.0
 
 dev_dependencies:
   flutter_test:

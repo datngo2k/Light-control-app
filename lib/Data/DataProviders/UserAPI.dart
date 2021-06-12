@@ -48,10 +48,10 @@ class UserAPI {
   }
 
 
-  AuthState signIn(String email, String password) {
+  Future<AuthState> signIn(String email, String password) async {
     firebaseAuth = FirebaseAuth.instance;
     try {
-      firebaseAuth.signInWithEmailAndPassword(
+      await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );

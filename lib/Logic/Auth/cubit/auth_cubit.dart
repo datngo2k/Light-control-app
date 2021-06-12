@@ -14,7 +14,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoginFailed(errorMessage: "Tài khoản chưa được kích hoạt hoặc không tồn tại"));
     }
     else{
-      AuthState state =  userRespository.signIn(email, password);
+      AuthState state =  await userRespository.signIn(email, password);
       emit(state);
     }
   }
@@ -24,7 +24,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoginFailed(errorMessage: "Ban khong co quyen admin"));
     }
     else{
-      AuthState state =  userRespository.signIn(email, password);
+      AuthState state =  await userRespository.signIn(email, password);
       emit(state);
     }
   }

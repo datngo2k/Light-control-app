@@ -16,8 +16,8 @@ class UserRespository {
     return state;
   }
 
-  AuthState signIn(String email, String password) {
-    AuthState state = userAPI.signIn(email, password);
+  Future<AuthState> signIn(String email, String password) async {
+    AuthState state = await userAPI.signIn(email, password);
     return state;
   }
 

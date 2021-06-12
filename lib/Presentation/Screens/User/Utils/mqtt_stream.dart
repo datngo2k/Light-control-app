@@ -35,6 +35,7 @@ class AppMqttTransactions {
     // CODE IS (in this case the filename is mqtt_stream.dart)
     // TBD: I could not find a way to get the API to return the filename.
     log = Logger('mqtt_stream.dart');
+
   }
   MqttClient client;
   //
@@ -50,7 +51,7 @@ class AppMqttTransactions {
     // The rest of the code in the Main UI thread can continue.
     // I liked the explanation in the "Dart & Flutter Asnchronous Tutorial.."
     // https://bit.ly/2Dq12PJ
-    //
+
     if (await _connectToClient() == true) {
       /// Add the unsolicited disconnection callback
       // client.onDisconnected = _onDisconnected;
@@ -118,7 +119,6 @@ class AppMqttTransactions {
   // with gitHub.
   //
   Future<Map> _getBrokerAndKey() async {
-    // TODO: Check if private.json does not exist or expected key/values are not there.
     String connect = await rootBundle.loadString('config/private.json');
     return (json.decode(connect));
   }
@@ -186,10 +186,11 @@ class AppMqttTransactions {
   Future _subscribe(String topic) async {
     // for now hardcoding the topic
     if (this.bAlreadySubscribed == true) {
+      print("dat ngo tan 2k");
       client.unsubscribe(this.previousTopic);
     }
     log.info('Subscribing to the topic $topic');
-    client.subscribe(topic, MqttQos.atMostOnce);
+    client.subscribe(topic, MqttQos.atLeastOnce);
 
 
     /// The client has a change notifier object(see the Observable class) which we then listen to to get
@@ -214,7 +215,7 @@ class AppMqttTransactions {
     if (await _connectToClient() == true) {
       final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
       builder.addString(value);
-      client.publishMessage(topic, MqttQos.atMostOnce, builder.payload);
+      client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload);
     }
   }
 }

@@ -45,4 +45,6 @@ const kBigTextStyle = TextStyle(
   fontSize: 36,
   fontFamily: "Mullish-Bold",
   fontWeight: FontWeight.bold,
-);
+); 
+DateTime fromDate;
+DateTime toDate;
