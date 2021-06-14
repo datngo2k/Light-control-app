@@ -46,6 +46,9 @@ dependencies:
   logging: ^0.11.3+2
   stack_trace: ^1.9.3
   flutter_countdown_timer: ^4.1.0
+  jiffy: ^4.1.0
+  fl_chart: ^0.36.1
+  date_picker_timeline: ^1.2.3
 
 dev_dependencies:
   flutter_test:

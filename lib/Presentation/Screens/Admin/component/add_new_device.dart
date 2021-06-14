@@ -75,17 +75,17 @@ class _AddNewDeviceDialogState extends State<AddNewDeviceDialog> {
                 SizedBox(
                   height: 10.0,
                 ),
-                Text("Max intensity: $maxIntensity"),
-                Slider(
-                  value: maxIntensity.toDouble(),
-                  min: 0,
-                  max: 255.0,
-                  onChanged: (double newValue) {
-                    setState(() {
-                      maxIntensity = newValue.round();
-                    });
-                  },
-                ),
+                // Text("Max intensity: $maxIntensity"),
+                // Slider(
+                //   value: maxIntensity.toDouble(),
+                //   min: 0,
+                //   max: 255.0,
+                //   onChanged: (double newValue) {
+                //     setState(() {
+                //       maxIntensity = newValue.round();
+                //     });
+                //   },
+                // ),
               ],
             ),
           )

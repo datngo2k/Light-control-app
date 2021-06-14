@@ -12,6 +12,7 @@ import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 import 'package:light_controller_app/Presentation/Component/CustomAppBar.dart';
 import 'package:light_controller_app/Presentation/Screens/Admin/component/add_new_device.dart';
 import 'package:light_controller_app/Presentation/Screens/Admin/component/background.dart';
+import 'package:light_controller_app/Presentation/Screens/User/component/log_device.dart';
 import 'package:light_controller_app/Presentation/components/rounded_input_field_with_icon.dart';
 import 'package:light_controller_app/constant/constant.dart';
 
@@ -243,11 +244,23 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                 ],
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.add_box),
-                              onPressed: () {
-                                _addDeviceDialog(context, rooms[roomIndex].id);
-                              },
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.info_outline),
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>LogScreen(room: rooms[roomIndex])));
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.add_box),
+                                  onPressed: () {
+                                    _addDeviceDialog(context, rooms[roomIndex].id);
+                                  },
+                                ),
+                                
+                              ],
                             ),
                           ]),
                         ),

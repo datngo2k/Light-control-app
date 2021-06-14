@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 const kBackgroundColor = Color(0xFFFCECDD);
 const kPrimaryColor = Colors.black;
 const kButtonColor = Color(0xFFFF6701);
@@ -48,3 +48,5 @@ const kBigTextStyle = TextStyle(
 ); 
 DateTime fromDate;
 DateTime toDate;
+
+DateFormat dateFormat = DateFormat('dd-MM-yyyy–kk:mm:ss');

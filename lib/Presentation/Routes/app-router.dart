@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:light_controller_app/Presentation/Screens/Admin/admin_screen.dart';
 import 'package:light_controller_app/Presentation/Screens/Login/login_screen.dart';
 import 'package:light_controller_app/Presentation/Screens/Register/register_screen.dart';
+import 'package:light_controller_app/Presentation/Screens/User/component/log_device.dart';
 import 'package:light_controller_app/Presentation/Screens/User/user-screen.dart';
 
 
@@ -27,6 +28,11 @@ class AppRouter {
       case '/user':
         return MaterialPageRoute(
           builder: (_) => UserScreen(),
+        );
+        break;
+      case '/log':
+        return MaterialPageRoute(
+          builder: (_) => LogScreen(),
         );
         break;
       default: return null;

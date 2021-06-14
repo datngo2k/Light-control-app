@@ -6,11 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:light_controller_app/Data/Models/Bulb.dart';
+import 'package:light_controller_app/Data/Models/Room.dart';
 import 'package:light_controller_app/Data/Models/Sensor.dart';
+import 'package:light_controller_app/Logic/Action/cubit/action_cubit.dart';
 import 'package:light_controller_app/Logic/LightControl/cubit/lightcontrol_cubit.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 import 'package:light_controller_app/Presentation/Component/CustomAppBar.dart';
 import 'package:light_controller_app/Presentation/Screens/User/Utils/mqtt_stream.dart';
+import 'package:light_controller_app/Presentation/Screens/User/component/log_device.dart';
 import 'package:light_controller_app/Presentation/Screens/User/component/manage_bulb.dart';
 import 'package:light_controller_app/Presentation/Screens/User/component/background.dart';
 import 'package:light_controller_app/Presentation/components/rounded_button.dart';
@@ -161,6 +164,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(children: [
                         ListTile(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>LogScreen(room: state.room)));
+                            },
                             leading: Icon(Icons.meeting_room),
                             title: Text("${state.room.id}", style: kTextStyle),
                             tileColor: kBaseColor,),
@@ -270,7 +276,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                             sensor.data =
                                                 int.parse(currentStatus);
                                             BlocProvider.of<RoomCubit>(context)
-                                                .updateSensor("H2-105", sensor);
+                                                .updateSensorValue("H2-105", sensor);
                                             if (isAuto) {
                                               if (int.parse(currentStatus) <
                                                   100) {
@@ -431,6 +437,13 @@ class _DeviceScreenState extends State<DeviceScreen> {
                 ));
           } else if (state is RoomGetAllSuccess) {
             BlocProvider.of<RoomCubit>(context).getRoom("H2-105");
+            return Background(
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
+                ),
+              ),
+            );
           } else {
             print(state);
             return Background(

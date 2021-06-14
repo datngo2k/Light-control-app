@@ -46,9 +46,26 @@ class RoomRespository {
     }
   }
 
+  RoomState updateBulbState(String roomId, Bulb bulb) {
+    try {
+      roomAPI.updateBulbState(roomId, bulb);
+      return RoomUpdateDeviceSuccess();
+    } catch (e) {
+      return RoomUpdateDeviceFailed(errorMessage: e.toString());
+    }
+  }
+
   RoomState updateSensor(String roomId, Sensor sensor) {
     try {
-      roomAPI.addNewSensor(roomId, sensor);
+      roomAPI.updateSensor(roomId, sensor);
+      return RoomUpdateDeviceSuccess();
+    } catch (e) {
+      return RoomUpdateDeviceFailed(errorMessage: e.toString());
+    }
+  }
+  RoomState updateSensorValue(String roomId, Sensor sensor) {
+    try {
+      roomAPI.updateSensorValue(roomId, sensor);
       return RoomUpdateDeviceSuccess();
     } catch (e) {
       return RoomUpdateDeviceFailed(errorMessage: e.toString());

@@ -4,10 +4,12 @@ import 'package:light_controller_app/Data/Models/Device.dart';
 import 'package:light_controller_app/Data/Models/Room.dart';
 import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Data/Models/Sensor.dart';
+import 'package:intl/intl.dart';
 
 class RoomAPI {
   static FirebaseDatabase database = new FirebaseDatabase();
   static DatabaseReference _roomRef = database.reference().child('room');
+  static DatabaseReference _actionRef = database.reference().child('action');
   List<Room> rooms = [];
   List<Schedule> schedules = [];
 
@@ -99,6 +101,12 @@ class RoomAPI {
   void updateBulb(String roomId, Bulb bulb) {
     _roomRef.child(roomId).child("bulb").child(bulb.id).update(bulb.toJson());
   }
+  void updateBulbState(String roomId, Bulb bulb) {
+    _roomRef.child(roomId).child("bulb").child(bulb.id).update(bulb.toJson());
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('dd-MM-yyyy–kk:mm:ss').format(now);
+    _actionRef.child(roomId).child("bulb").child(bulb.id).child(formattedDate).set(bulb.status);
+  }
 
   void updateSensor(String roomId, Sensor sensor) {
     _roomRef
@@ -106,6 +114,24 @@ class RoomAPI {
         .child("sensor")
         .child(sensor.id)
         .update(sensor.toJson());
+  }
+  void updateSensorValue(String roomId, Sensor sensor) {
+    _roomRef
+        .child(roomId)
+        .child("sensor")
+        .child(sensor.id)
+        .update(sensor.toJson());
+        DateTime now = DateTime.now();
+        String formattedDate = DateFormat('dd-MM-yyyy–kk:mm:ss').format(now);
+
+    // dynamic data = {
+    //                     "id": "1",
+    //                     "name": "LED",
+    //                     "data": 1,
+    //                     "unit": ""
+    // };
+    
+    _actionRef.child(roomId).child("sensor").child(formattedDate).set(sensor.data);
   }
 
   void removeBulb(String roomId, Bulb bulb) {

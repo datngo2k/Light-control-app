@@ -1,13 +1,16 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:light_controller_app/Data/Models/Action.dart';
 import 'package:light_controller_app/Data/Models/Device.dart';
 import 'package:light_controller_app/constant/constant.dart';
 
-class Bulb extends Device {
+class Bulb extends Equatable {
   String id;
   int status;
   String topic;
+  List<ActionDevice> actions;
 
   Bulb({
     this.id,
@@ -52,4 +55,7 @@ class Bulb extends Device {
       return 0;
     } 
   }
+
+  @override
+  List<Object> get props => [id, status, topic, actions];
 }

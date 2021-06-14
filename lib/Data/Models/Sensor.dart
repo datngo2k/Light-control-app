@@ -1,15 +1,17 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:light_controller_app/Data/Models/Action.dart';
 import 'package:light_controller_app/Data/Models/Device.dart';
 
 // import 'package:light_controller_app/Data/Models/SensorHistory.dart';
 
-class Sensor extends Device{
+class Sensor extends Equatable{
   String id;
   int data;
   String topic;
-  // List<SensorHistory> sensorHistory;
+  List<ActionDevice> actions;
 
   Sensor({@required this.id, this.data, this.topic});
 
@@ -36,4 +38,8 @@ class Sensor extends Device{
   String getInfo() {
     return "$id";
   }
+
+  @override
+    @override
+  List<Object> get props => [id, data, topic, actions];
 }
