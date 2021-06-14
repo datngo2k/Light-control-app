@@ -49,4 +49,4 @@ const kBigTextStyle = TextStyle(
 DateTime fromDate;
 DateTime toDate;
 
-DateFormat dateFormat = DateFormat('dd-MM-yyyy–kk:mm:ss');
+DateFormat dateFormat = DateFormat('dd-MM-yyyy–HH:mm:ss');

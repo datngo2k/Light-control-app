@@ -16,6 +16,7 @@ class ActionGetAllSuccess extends ActionState {
   @override
   List<Object> get props => [bulbs, sensors];
 }
+class ActionLoading extends ActionState {}
 
 class ActionGetAllFailed extends ActionState {
   final String errorMessage;

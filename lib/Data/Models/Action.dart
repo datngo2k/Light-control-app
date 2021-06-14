@@ -17,11 +17,10 @@ class ActionDevice extends Equatable{
   });
 
   factory ActionDevice.fromSnapshot(key, id, value) {
-    
     return ActionDevice(
       idDevice: id,
       data: value,
-      date: dateFormat.parse(key)
+      date: dateFormat.parse(key, true).add(Duration(hours: 1))
     );
   }
 
