@@ -14,7 +14,6 @@ class ActionCubit extends Cubit<ActionState> {
   void getAction(String roomId, List<Bulb> bulbs, List<Sensor> sensors, DateTime datetime) async {
     emit(ActionLoading());
     var state = await actionRespository.getAction(roomId, bulbs, sensors, datetime);
-    print(state);
     emit(state);
   }
 }

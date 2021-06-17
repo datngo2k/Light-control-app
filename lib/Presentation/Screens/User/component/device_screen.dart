@@ -319,6 +319,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                 );
                               }),
                         ),
+                        SizedBox(height: 10),
                         RoundedButton(
                             press: () {
                               setState(() {

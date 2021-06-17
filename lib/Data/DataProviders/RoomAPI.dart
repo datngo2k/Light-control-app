@@ -105,8 +105,10 @@ class RoomAPI {
   void updateBulbState(String roomId, Bulb bulb) {
     _roomRef.child(roomId).child("bulb").child(bulb.id).update(bulb.toJson());
     DateTime now = DateTime.now();
+    print("debug");
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    String formattedDateTime = DateFormat('dd-MM-yyyy–hh:mm:ss').format(now);
+    String formattedDateTime = DateFormat('dd-MM-yyyy–kk:mm:ss').format(now);
+    print(formattedDateTime);
     _actionRef
         .child(roomId)
         .child("bulb")
@@ -132,7 +134,7 @@ class RoomAPI {
         .update(sensor.toJson());
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    String formattedDateTime = DateFormat('dd-MM-yyyy–hh:mm:ss').format(now);
+    String formattedDateTime = DateFormat('dd-MM-yyyy–kk:mm:ss').format(now);
 
     _actionRef
         .child(roomId)

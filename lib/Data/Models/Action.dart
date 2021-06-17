@@ -20,7 +20,7 @@ class ActionDevice extends Equatable{
     return ActionDevice(
       idDevice: id,
       data: value,
-      date: dateFormat.parse(key, true).add(Duration(hours: 1))
+      date: dateFormat.parse(key, true)
     );
   }
 

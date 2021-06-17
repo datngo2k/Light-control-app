@@ -50,7 +50,7 @@ class _LogScreenState extends State<LogScreen> {
                   // New date selected
                   setState(() {
                     _selectedValue = date;
-                    print(date);
+                    print(DateTime.now());
                     BlocProvider.of<ActionCubit>(context).getAction(
                         widget.room.id,
                         widget.room.bulbs,
@@ -61,7 +61,7 @@ class _LogScreenState extends State<LogScreen> {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
+              child: Background(
                 child: BlocBuilder<ActionCubit, ActionState>(
                     builder: (context, state) {
                   int i = 0;
@@ -76,7 +76,9 @@ class _LogScreenState extends State<LogScreen> {
 
                     List<ActionDevice> listActionBulb = [];
                     if (state.bulbs.length != 0) {
-                      listActionBulb = state.bulbs[0].actions;
+                      for (var bulb in state.bulbs) {
+                        listActionBulb += bulb.actions;
+                      }
                     }
 
                     listActionBulb.sort((a1, a2) {
@@ -85,18 +87,18 @@ class _LogScreenState extends State<LogScreen> {
                     dynamic intensity = list
                         .map((e) => FlSpot((i++).toDouble(), e.data.toDouble()))
                         .toList();
-                    return Background(
-                        child: Padding(
+                    return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Intensity Room",
-                              style: kTextStyle,
-                            ),
-                            Expanded(
-                              child: Center(
+                      child: ListView(children: [
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Intensity Room",
+                                style: kTextStyle,
+                              ),
+                              SizedBox(height: 20),
+                              Center(
                                 child: intensity.length == 0
                                     ? Text(
                                         "Không có lịch sử",
@@ -165,23 +167,22 @@ class _LogScreenState extends State<LogScreen> {
                                         ),
                                       ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Center(
-                              child: Text(
-                                  Jiffy(_selectedValue).format("E dd/MM/yyyy"),
-                                  style: kTextStyle.copyWith(fontSize: 15)),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              "Tasks",
-                              style: kTextStyle,
-                            ),
-                            SizedBox(height: 5),
-                            Expanded(
+                              SizedBox(height: 10),
+                              Center(
+                                child: Text(
+                                    Jiffy(_selectedValue)
+                                        .format("E dd/MM/yyyy"),
+                                    style: kTextStyle.copyWith(fontSize: 15)),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Tasks",
+                                style: kTextStyle,
+                              ),
+                              SizedBox(height: 5),
                               // height: 100,
                               // width: 300,
-                              child: listActionBulb.length == 0
+                              listActionBulb.length == 0
                                   ? Center(
                                       child: Text(
                                         "Không có lịch sử",
@@ -189,6 +190,10 @@ class _LogScreenState extends State<LogScreen> {
                                       ),
                                     )
                                   : ListView.builder(
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemCount: listActionBulb.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
@@ -235,9 +240,9 @@ class _LogScreenState extends State<LogScreen> {
                                           ),
                                         );
                                       }),
-                            ),
-                          ]),
-                    ));
+                            ]),
+                      ]),
+                    );
                   } else {
                     return Background(
                       child: Center(

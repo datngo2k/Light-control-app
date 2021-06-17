@@ -12,7 +12,6 @@ import 'package:light_controller_app/Presentation/Routes/app-router.dart';
 import 'package:light_controller_app/constant/constant.dart';
 import 'package:logging/logging.dart';
 import 'package:stack_trace/stack_trace.dart';
-
 import 'Logic/Action/cubit/action_cubit.dart';
 import 'Logic/Room/cubit/room_cubit.dart';
 import 'Logic/Schedule/cubit/schedule_cubit.dart';
