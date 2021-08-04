@@ -67,7 +67,8 @@ flutter:
 
   assets:
     - asset/img/
-    - config/private.json
+    - config/led.json
+    - config/light.json
   fonts:
     - family: Mullish
       fonts:

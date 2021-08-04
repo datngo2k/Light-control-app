@@ -11,7 +11,6 @@ import 'package:light_controller_app/Presentation/components/rounded_input_field
 import 'package:light_controller_app/Presentation/components/rounded_password_field.dart';
 import 'package:light_controller_app/constant/constant.dart';
 
-
 class UserBody extends StatefulWidget {
   @override
   _UserBodyState createState() => _UserBodyState();
@@ -22,17 +21,20 @@ class _UserBodyState extends State<UserBody> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-     final _kTabPages = <Widget>[
+    final _kTabPages = <Widget>[
       DeviceScreen(),
       RoomScreen(),
       AccountScreen(),
       HistoryScreen(),
     ];
     final _kBottmonNavBarItems = <BottomNavigationBarItem>[
-      const BottomNavigationBarItem(icon: Icon(Icons.meeting_room), label: 'Devices'), 
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.meeting_room), label: 'Devices'),
       const BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Schedule'),
-      const BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Account'),
-      const BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.account_circle), label: 'Account'),
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.history), label: 'History'),
     ];
     assert(_kTabPages.length == _kBottmonNavBarItems.length);
     final bottomNavBar = BottomNavigationBar(
@@ -49,8 +51,11 @@ class _UserBodyState extends State<UserBody> {
     );
 
     return Scaffold(
-      body: Background(child: _kTabPages[_currentTabIndex]),
-      bottomNavigationBar: bottomNavBar
-    );
+        body: Background(
+            child: IndexedStack(
+          index: _currentTabIndex,
+          children: _kTabPages,
+        )),
+        bottomNavigationBar: bottomNavBar);
   }
 }

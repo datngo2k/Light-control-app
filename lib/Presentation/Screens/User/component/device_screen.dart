@@ -9,6 +9,7 @@ import 'package:light_controller_app/Data/Models/Bulb.dart';
 import 'package:light_controller_app/Data/Models/Room.dart';
 import 'package:light_controller_app/Data/Models/Sensor.dart';
 import 'package:light_controller_app/Logic/Action/cubit/action_cubit.dart';
+import 'package:light_controller_app/Logic/GetDevice/getdevice_cubit.dart';
 import 'package:light_controller_app/Logic/LightControl/cubit/lightcontrol_cubit.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 import 'package:light_controller_app/Presentation/Component/CustomAppBar.dart';
@@ -26,36 +27,32 @@ class DeviceScreen extends StatefulWidget {
 }
 
 class _DeviceScreenState extends State<DeviceScreen> {
-  AppMqttTransactions lightMqtt;
-  AppMqttTransactions sensorMqtt;
+  final AppMqttTransactions lightMqtt = AppMqttTransactions("led");
+  final AppMqttTransactions sensorMqtt = AppMqttTransactions("light");
   TimeOfDay fromTime;
   TimeOfDay toTime;
   DateTime selectedTime;
   DateTime _currentDate;
   bool isAuto = false;
+  final dataOff = {"id": "1", "name": "LED", "data": 0, "unit": ""};
+  final dataOn = {"id": "1", "name": "LED", "data": 1, "unit": ""};
   @override
   void initState() {
-    lightMqtt = AppMqttTransactions();
-    sensorMqtt = AppMqttTransactions();
+    // lightMqtt = AppMqttTransactions("led");
+    // sensorMqtt = AppMqttTransactions("light");
     fromTime = TimeOfDay.now();
     toTime = TimeOfDay.now();
-    sensorMqtt.subscribe("datngotan2000/feeds/light-control.cam-bien-1");
-    BlocProvider.of<RoomCubit>(context).getRoom("H2-105");
+    BlocProvider.of<GetdeviceCubit>(context).getRoom("H2-105");
     super.initState();
   }
 
-  // Future<void> _bulbInfoDialog(
-  //     BuildContext context, Bulb bulb, String roomId, AppMqttTransactions sensorMqtt) async {
-  //   return showDialog(
-  //       context: context,
-  //       builder: (_) {
-  //         return BulbManageDialog(
-  //           bulb: bulb,
-  //           roomId: roomId,
-  //           myMqtt: sensorMqtt
-  //         );
-  //       });
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    lightMqtt.dispose();
+    sensorMqtt.dispose();
+  }
+
   Future<TimeOfDay> _selectTime(BuildContext context) {
     final now = DateTime.now();
 
@@ -66,7 +63,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
   }
 
   Widget timer() {
-    if (fromDate == null || (fromDate.isBefore(DateTime.now()) && toDate.isBefore(DateTime.now()))) {
+    if (fromDate == null ||
+        (fromDate.isBefore(DateTime.now()) &&
+            toDate.isBefore(DateTime.now()))) {
       return SizedBox();
     }
     if (fromDate.isAfter(DateTime.now())) {
@@ -79,8 +78,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
             onEnd: () {
               setState(() {
                 BlocProvider.of<LightcontrolCubit>(context).setOn();
-                final snackBar =
-                    SnackBar(content: Text("Light on"), duration: Duration(seconds: 1),);
+                final snackBar = SnackBar(
+                  content: Text("Light on"),
+                  duration: Duration(seconds: 1),
+                );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 return timer();
               });
@@ -98,8 +99,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
             endTime: toDate.millisecondsSinceEpoch,
             onEnd: () {
               setState(() {
-                final snackBar =
-                    SnackBar(content: Text("Light off"), duration: Duration(seconds: 1),);
+                final snackBar = SnackBar(
+                  content: Text("Light off"),
+                  duration: Duration(seconds: 1),
+                );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 BlocProvider.of<LightcontrolCubit>(context).setOff();
                 return timer();
@@ -116,44 +119,39 @@ class _DeviceScreenState extends State<DeviceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar("LIGHT", "CONTROL"),
-        body: BlocBuilder<RoomCubit, RoomState>(builder: (context, state) {
-          if (state is RoomGetRoomSuccess) {
+        body: BlocBuilder<GetdeviceCubit, GetdeviceState>(
+            builder: (context, state) {
+          if (state is GetDeviceGetRoomSuccess) {
             // sensorMqtt.subscribe(state.room.sensors[0].topic);
             return BlocListener<LightcontrolCubit, LightcontrolState>(
                 listener: (context, subState) async {
                   if (subState is LightcontrolOff) {
                     for (Bulb bulb in state.room.bulbs) {
                       bulb.status = 0;
-                      dynamic data = {
-                        "id": "1",
-                        "name": "LED",
-                        "data": 0,
-                        "unit": ""
-                      };
                       BlocProvider.of<RoomCubit>(context)
                           .updateIntensityBulb("H2-105", bulb);
                       await lightMqtt.subscribe(bulb.topic);
-                      await lightMqtt.publish(bulb.topic, jsonEncode(data));
+                      await lightMqtt.publish(bulb.topic, jsonEncode(dataOff));
                     }
-                    BlocProvider.of<RoomCubit>(context).getRoom("H2-105");
+                    final snackBar = SnackBar(
+                        content: Text("${"Tắt hết đèn"}"),
+                        duration: Duration(milliseconds: 800));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    BlocProvider.of<GetdeviceCubit>(context).getRoom("H2-105");
                   } else if (subState is LightcontrolOn) {
                     for (Bulb bulb in state.room.bulbs) {
                       bulb.status = 1;
-                      dynamic data = {
-                        "id": "1",
-                        "name": "LED",
-                        "data": 1,
-                        "unit": ""
-                      };
                       BlocProvider.of<RoomCubit>(context)
                           .updateIntensityBulb("H2-105", bulb);
                       await lightMqtt.subscribe(bulb.topic);
-                      await lightMqtt.publish(bulb.topic, jsonEncode(data));
+                      await lightMqtt.publish(bulb.topic, jsonEncode(dataOn));
                     }
-                    BlocProvider.of<RoomCubit>(context).getRoom("H2-105");
+                    final snackBar = SnackBar(
+                        content: Text("Bật hết đèn"),
+                        duration: Duration(milliseconds: 800));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    BlocProvider.of<GetdeviceCubit>(context).getRoom("H2-105");
                   }
-                  // await sensorMqtt.subscribe(
-                  //                 state.room.sensors[0].topic);
                 },
                 listenWhen: (previous, current) {
                   return previous != current;
@@ -164,12 +162,19 @@ class _DeviceScreenState extends State<DeviceScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(children: [
                         ListTile(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>LogScreen(room: state.room)));
-                            },
-                            leading: Icon(Icons.meeting_room),
-                            title: Text("${state.room.id}", style: kTextStyle),
-                            tileColor: kBaseColor,),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    LogScreen(room: state.room),
+                              ),
+                            );
+                          },
+                          leading: Icon(Icons.meeting_room),
+                          title: Text("${state.room.id}", style: kTextStyle),
+                          tileColor: kBaseColor,
+                        ),
                         timer(),
                         SizedBox(height: 10),
                         Text(
@@ -193,20 +198,21 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                     //     state.room.bulbs[deviceIndex], state.room.id, lightMqtt);
                                     Bulb bulb = state.room.bulbs[deviceIndex];
                                     int status = bulb.toggle();
-
-                                    dynamic data = {
-                                      "id": "1",
-                                      "name": "LED",
-                                      "data": status,
-                                      "unit": ""
-                                    };
                                     BlocProvider.of<RoomCubit>(context)
                                         .updateIntensityBulb("H2-105", bulb);
-                                    BlocProvider.of<RoomCubit>(context)
+                                    BlocProvider.of<GetdeviceCubit>(context)
                                         .getRoom("H2-105");
                                     await lightMqtt.subscribe(bulb.topic);
+                                    final snackBar = SnackBar(
+                                        content: Text(
+                                            status == 1 ? "${bulb.id} bật" : "${bulb.id} tắt"),
+                                        duration: Duration(milliseconds: 800));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                     await lightMqtt.publish(
-                                        bulb.topic, jsonEncode(data));
+                                        bulb.topic,
+                                        jsonEncode(
+                                            status == 1 ? dataOn : dataOff));
                                   },
                                   child: StreamBuilder(
                                       stream: null,
@@ -260,8 +266,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                         state.room.sensors[deviceIndex].topic);
                                   },
                                   child: StreamBuilder<Object>(
-                                      stream:
-                                          sensorMqtt.adafruitFeed.sensorStream,
+                                      stream: sensorMqtt.sensorStream,
                                       builder: (context, snapshot) {
                                         Sensor sensor =
                                             state.room.sensors[deviceIndex];
@@ -276,7 +281,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                             sensor.data =
                                                 int.parse(currentStatus);
                                             BlocProvider.of<RoomCubit>(context)
-                                                .updateSensorValue("H2-105", sensor);
+                                                .updateSensorValue(
+                                                    "H2-105", sensor);
                                             if (isAuto) {
                                               if (int.parse(currentStatus) <
                                                   100) {
@@ -436,15 +442,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
                     ),
                   ),
                 ));
-          } else if (state is RoomGetAllSuccess) {
-            BlocProvider.of<RoomCubit>(context).getRoom("H2-105");
-            return Background(
-              child: Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.lightBlueAccent,
-                ),
-              ),
-            );
           } else {
             print(state);
             return Background(

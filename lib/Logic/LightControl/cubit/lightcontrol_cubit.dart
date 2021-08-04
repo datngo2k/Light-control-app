@@ -12,4 +12,7 @@ class LightcontrolCubit extends Cubit<LightcontrolState> {
   void setOff(){
     emit(LightcontrolOff());
   }
+  void setDefault(){
+    emit(LightcontrolInitial());
+  }
 }

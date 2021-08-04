@@ -20,6 +20,9 @@
 // put into a Stream so the rest of Flutter / Dart can interact with the data.
 //
 //
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -28,14 +31,15 @@ import 'Adafruit_feed.dart';
 
 class AppMqttTransactions {
   Logger log;
-  AdafruitFeed adafruitFeed = AdafruitFeed();
+  var _feedController = StreamController<String>.broadcast();
+  Stream<String> get sensorStream => _feedController.stream;
+  final String config;
 // Constructor
-  AppMqttTransactions() {
+  AppMqttTransactions(this.config) {
     // Start logger.  MAKE SURE STRING IS NAME OF DART FILE WHERE
     // CODE IS (in this case the filename is mqtt_stream.dart)
     // TBD: I could not find a way to get the API to return the filename.
     log = Logger('mqtt_stream.dart');
-
   }
   MqttClient client;
   //
@@ -43,15 +47,11 @@ class AppMqttTransactions {
   // in some situations, this will make sense.  For now I limit to one subscription at a time.
   String previousTopic;
   bool bAlreadySubscribed = false;
-//////////////////////////////////////////
 // Subscribe to an (Adafruit) mqtt topic.
+  void dispose() {
+    _feedController.close();
+  }
   Future<bool> subscribe(String topic) async {
-    // With await, we are assured of getting a string back and not a
-    // Future<String> placeholder instance.
-    // The rest of the code in the Main UI thread can continue.
-    // I liked the explanation in the "Dart & Flutter Asnchronous Tutorial.."
-    // https://bit.ly/2Dq12PJ
-
     if (await _connectToClient() == true) {
       /// Add the unsolicited disconnection callback
       // client.onDisconnected = _onDisconnected;
@@ -119,7 +119,7 @@ class AppMqttTransactions {
   // with gitHub.
   //
   Future<Map> _getBrokerAndKey() async {
-    String connect = await rootBundle.loadString('config/private.json');
+    String connect = await rootBundle.loadString('config/$config.json');
     return (json.decode(connect));
   }
 
@@ -127,13 +127,6 @@ class AppMqttTransactions {
   // login to Adafruit
   //
   Future<MqttClient> _login() async {
-    // With await, we are assured of getting a string back and not a
-    // Future<String> placeholder instance.
-    // The rest of the code in the Main UI thread can continue.  When
-    // the function completes, it will go ahead.
-    // I liked the explanation in the "Dart & Flutter Asnchronous Tutorial.."
-    // https://bit.ly/2Dq12PJ
-
     Map connectJson = await _getBrokerAndKey();
     // TBD Test valid broker and key
     log.info('in _login....broker  : ${connectJson['broker']}');
@@ -161,7 +154,7 @@ class AppMqttTransactions {
     try {
       await client.connect();
     } on Exception catch (e) {
-      log.severe('EXCEPTION::client exception - $e');
+      // log.severe('EXCEPTION::client exception - $e');
       client.disconnect();
       client = null;
       return client;
@@ -185,8 +178,7 @@ class AppMqttTransactions {
 //
   Future _subscribe(String topic) async {
     // for now hardcoding the topic
-    if (this.bAlreadySubscribed == true) {
-      print("dat ngo tan 2k");
+    if (this.bAlreadySubscribed == true && topic != previousTopic) {
       client.unsubscribe(this.previousTopic);
     }
     log.info('Subscribing to the topic $topic');
@@ -201,14 +193,14 @@ class AppMqttTransactions {
           MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
       /// The payload is a byte buffer, this will be specific to the topic
-      adafruitFeed.add(pt);
-      log.info(
-          'Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      print(pt);
+      _feedController.add(pt);
+      // log.info(
+      //     'Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
       return pt;
     });
   }
 
-//////////////////////////////////////////
 // Publish to an (Adafruit) mqtt topic.
   Future<void> publish(String topic, String value) async {
     // Connect to the client if we haven't already

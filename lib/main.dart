@@ -13,23 +13,26 @@ import 'package:light_controller_app/constant/constant.dart';
 import 'package:logging/logging.dart';
 import 'package:stack_trace/stack_trace.dart';
 import 'Logic/Action/cubit/action_cubit.dart';
+import 'Logic/GetDevice/getdevice_cubit.dart';
 import 'Logic/Room/cubit/room_cubit.dart';
 import 'Logic/Schedule/cubit/schedule_cubit.dart';
+
 void initLogger() {
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((LogRecord rec) {
-      final List<Frame> frames = Trace.current().frames;
-      try {
-        final Frame f = frames.skip(0).firstWhere((Frame f) =>
-            f.library.toLowerCase().contains(rec.loggerName.toLowerCase()) &&
-            f != frames.first);
-        print(
-            '${rec.level.name}: ${f.member} (${rec.loggerName}:${f.line}): ${rec.message}');
-      } catch (e) {
-        print(e.toString());
-      }
-    });
-  }
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    final List<Frame> frames = Trace.current().frames;
+    try {
+      final Frame f = frames.skip(0).firstWhere((Frame f) =>
+          f.library.toLowerCase().contains(rec.loggerName.toLowerCase()) &&
+          f != frames.first);
+      print(
+          '${rec.level.name}: ${f.member} (${rec.loggerName}:${f.line}): ${rec.message}');
+    } catch (e) {
+      print(e.toString());
+    }
+  });
+}
+
 void main() async {
   initLogger();
   AppRouter appRouter = AppRouter();
@@ -75,14 +78,15 @@ class MyApp extends StatelessWidget {
         BlocProvider<ActionCubit>(
           create: (context) => ActionCubit(),
         ),
+        BlocProvider<GetdeviceCubit>(
+          create: (context) => GetdeviceCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Light Controller App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          backgroundColor: kBackgroundColor
-        ),
+            primarySwatch: Colors.blue, backgroundColor: kBackgroundColor),
         onGenerateRoute: appRouter.onGenerateRoute,
         builder: EasyLoading.init(),
       ),

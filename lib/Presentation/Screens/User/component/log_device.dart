@@ -42,7 +42,7 @@ class _LogScreenState extends State<LogScreen> {
             Container(
               color: kBackgroundColor,
               child: DatePicker(
-                DateTime.now().subtract(Duration(days: 3)),
+                DateTime.now().subtract(Duration(days: 4)),
                 initialSelectedDate: DateTime.now(),
                 selectionColor: Color(0xFFFF6701),
                 selectedTextColor: Colors.white,
@@ -80,7 +80,6 @@ class _LogScreenState extends State<LogScreen> {
                         listActionBulb += bulb.actions;
                       }
                     }
-
                     listActionBulb.sort((a1, a2) {
                       return a1.date.isBefore(a2.date) ? 1 : 0;
                     });

@@ -5,6 +5,7 @@ import 'package:light_controller_app/Data/Models/Bulb.dart';
 import 'package:light_controller_app/Data/Models/Room.dart';
 import 'package:light_controller_app/Data/Models/Schedule.dart';
 import 'package:light_controller_app/Data/Models/Sensor.dart';
+import 'package:light_controller_app/Logic/GetDevice/getdevice_cubit.dart';
 import 'package:light_controller_app/Logic/Room/cubit/room_cubit.dart';
 
 class RoomRespository {
@@ -98,11 +99,11 @@ class RoomRespository {
     return RoomGetAllFailed(errorMessage: "Cannot get data");
   }
 
-  Future<RoomState> getRoom(String roomId) async {
-        Room room = await roomAPI.getRoom(roomId);
+  Future<GetdeviceState> getRoom(String roomId) async {
+    Room room = await roomAPI.getRoom(roomId);
     if (room != null) {
-      return RoomGetRoomSuccess(room: room);
+      return GetDeviceGetRoomSuccess(room: room);
     }
-    return RoomGetRoomFailed(errorMessage: "Cannot get data");
+    return GetDeviceGetRoomFailed(errorMessage: "Cannot get data");
   }
 }
